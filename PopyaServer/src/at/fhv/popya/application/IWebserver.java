@@ -1,4 +1,4 @@
-package at.fhv.popya.application.service;
+package at.fhv.popya.application;
 
 import java.util.List;
 

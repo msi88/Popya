@@ -1,10 +1,10 @@
 package at.fhv.popya.application.entity.impl;
 
+import java.io.BufferedInputStream;
+
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.location.LocationManager;
 import at.fhv.popya.application.entity.IUser;
-import at.fhv.popya.application.profile.IMovingProfile;
 
 /**
  * The user entity which represents the current chat user.
@@ -47,17 +47,24 @@ public class User implements IUser {
 	}
 
 	@Override
-	public Bitmap getImage() {
+	public BufferedInputStream getImage() {
 		return null;
 	}
 
 	@Override
-	public Location getCurrentLocation() {
+	public String getProfile() {
 		return null;
 	}
 
 	@Override
-	public IMovingProfile getProfile() {
+	public String getCurrentLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCurrentAltitude() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
