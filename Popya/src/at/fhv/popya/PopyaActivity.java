@@ -1,11 +1,11 @@
 package at.fhv.popya;
 
+import android.R;
 import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * test push blaat
- * The PopyaActivity class.
+ * test push blaat The PopyaActivity class.
  * 
  * @author Michael Sieber
  */
