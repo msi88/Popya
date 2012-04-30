@@ -1,7 +1,9 @@
 package at.fhv.popya.application.entity.impl;
+
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
+import at.fhv.popya.application.entity.IUser;
 import at.fhv.popya.application.profile.IMovingProfile;
 
 /**
@@ -23,11 +25,15 @@ public class User implements IUser {
 	 * @param chatName The users chat name
 	 * @param description The users self description
 	 * @param picture The profile picture
+	 * @param locationManager The location manager which is used to get the
+	 *            current user location
 	 */
-	public User(String chatName, String description, Bitmap picture) {
+	public User(String chatName, String description, Bitmap picture,
+			LocationManager locationManager) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;
+		_locationManager = locationManager;
 	}
 
 	@Override

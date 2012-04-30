@@ -1,4 +1,5 @@
 package at.fhv.popya.application.profile;
+
 import java.util.List;
 
 import android.location.Location;
@@ -11,8 +12,8 @@ import android.location.Location;
  */
 public interface IMovingProfile {
 
-	public static final int MOVEMENT_DISTANCE;
-	public static final int MOVEMENT_SWITCH_TIME;
+	public static final int MOVEMENT_DISTANCE = 50;
+	public static final int MOVEMENT_SWITCH_TIME = 5;
 
 	/**
 	 * Check the current state.

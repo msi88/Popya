@@ -1,11 +1,13 @@
 package at.fhv.popya.application.service.background;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import android.location.Location;
-import at.fhv.popya.application.entity.impl.IUser;
+import at.fhv.popya.application.entity.IUser;
 import at.fhv.popya.application.entity.impl.Message;
 import at.fhv.popya.application.entity.impl.UserPreferences;
+import at.fhv.popya.application.service.IWebserver;
 
 /**
  * Background service for messaging.
