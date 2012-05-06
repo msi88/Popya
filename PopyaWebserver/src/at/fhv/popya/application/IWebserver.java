@@ -2,9 +2,9 @@ package at.fhv.popya.application;
 
 import java.util.List;
 
-import at.fhv.popya.application.entity.IUser;
-import at.fhv.popya.application.entity.impl.Message;
-import at.fhv.popya.application.entity.impl.UserPreferences;
+import at.fhv.popya.application.model.IUser;
+import at.fhv.popya.application.model.impl.Message;
+import at.fhv.popya.application.model.impl.UserPreferences;
 
 /**
  * Interface for webserver interaction.
@@ -17,8 +17,10 @@ public interface IWebserver {
 	/**
 	 * Connect to the server.
 	 * 
-	 * @param preferences The user preferences
-	 * @param user The user
+	 * @param preferences
+	 *            The user preferences
+	 * @param user
+	 *            The user
 	 * @return A list of all available chat partners
 	 */
 	public List<IUser> connect(UserPreferences preferences, IUser user);
@@ -26,7 +28,8 @@ public interface IWebserver {
 	/**
 	 * Get all available messages based on the location of the user.
 	 * 
-	 * @param user The user
+	 * @param user
+	 *            The user
 	 * @return A list of all available messages for the specified user
 	 */
 	public List<Message<?>> getMessages(IUser user);
@@ -34,8 +37,10 @@ public interface IWebserver {
 	/**
 	 * Send a message.
 	 * 
-	 * @param user The user which is sending the message
-	 * @param message The message which should be sent
+	 * @param user
+	 *            The user which is sending the message
+	 * @param message
+	 *            The message which should be sent
 	 */
 	public void sendMessage(IUser user, Message<?> message);
 

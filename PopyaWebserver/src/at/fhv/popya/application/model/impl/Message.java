@@ -1,4 +1,4 @@
-package at.fhv.popya.application.entity.impl;
+package at.fhv.popya.application.model.impl;
 
 /**
  * Represents a single message.

@@ -3,9 +3,9 @@ package at.fhv.popya.server;
 import java.util.List;
 
 import at.fhv.popya.application.IWebserver;
-import at.fhv.popya.application.entity.IUser;
-import at.fhv.popya.application.entity.impl.Message;
-import at.fhv.popya.application.entity.impl.UserPreferences;
+import at.fhv.popya.application.model.IUser;
+import at.fhv.popya.application.model.impl.Message;
+import at.fhv.popya.application.model.impl.UserPreferences;
 
 /**
  * The popya webservice object.
