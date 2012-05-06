@@ -1,7 +1,8 @@
 package at.fhv.popya.application.profile.impl;
+
 import java.util.List;
 
-import android.location.Location;
+import at.fhv.popya.application.model.impl.Location;
 import at.fhv.popya.application.profile.IMovingProfile;
 
 /**

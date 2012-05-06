@@ -2,7 +2,7 @@ package at.fhv.popya.application.profile;
 
 import java.util.List;
 
-import android.location.Location;
+import at.fhv.popya.application.model.impl.Location;
 
 /**
  * Interface for all moving profiles.
@@ -18,7 +18,8 @@ public interface IMovingProfile {
 	/**
 	 * Check the current state.
 	 * 
-	 * @param locations The locations which where used to check the state
+	 * @param locations
+	 *            The locations which where used to check the state
 	 * @return The new moving state
 	 */
 	public IMovingProfile checkState(List<Location> locations);
