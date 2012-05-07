@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.fhv.popya.application.model.IUser;
-import at.fhv.popya.application.model.impl.Location;
-import at.fhv.popya.application.model.impl.Message;
+import at.fhv.popya.application.model.Location;
+import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.impl.UserPreferences;
 import at.fhv.popya.application.service.IWebserver;
 

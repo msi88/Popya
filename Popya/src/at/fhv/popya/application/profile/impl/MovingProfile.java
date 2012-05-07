@@ -2,7 +2,7 @@ package at.fhv.popya.application.profile.impl;
 
 import java.util.List;
 
-import at.fhv.popya.application.model.impl.Location;
+import at.fhv.popya.application.model.Location;
 import at.fhv.popya.application.profile.IMovingProfile;
 
 /**

@@ -1,11 +1,14 @@
 package at.fhv.popya.application.model.impl;
+
+import at.fhv.popya.application.model.IUserPreferences;
+
 /**
  * The user preferences.
  * 
  * @author Michael
  * @version 1.0
  */
-public class UserPreferences {
+public class UserPreferences implements IUserPreferences {
 
 	private final int _maxBroadcastDistance;
 	private final int _maxReceiveDistance;
@@ -15,13 +18,17 @@ public class UserPreferences {
 	/**
 	 * Create new UserPreferences.
 	 * 
-	 * @param maxBroadcastDistance The maximum distance of users to receive the
-	 *            sended messages in meters
-	 * @param maxReceiveDistance The maximum distance of users which can send
-	 *            messages to me in meters
-	 * @param serverAddress The server address for handling the connection
-	 * @param updateIntervall The update intervall in seconds in which the
-	 *            server will be asked for new messages
+	 * @param maxBroadcastDistance
+	 *            The maximum distance of users to receive the sended messages
+	 *            in meters
+	 * @param maxReceiveDistance
+	 *            The maximum distance of users which can send messages to me in
+	 *            meters
+	 * @param serverAddress
+	 *            The server address for handling the connection
+	 * @param updateIntervall
+	 *            The update intervall in seconds in which the server will be
+	 *            asked for new messages
 	 */
 	public UserPreferences(int maxBroadcastDistance, int maxReceiveDistance,
 			String serverAddress, int updateIntervall) {
@@ -36,6 +43,7 @@ public class UserPreferences {
 	 * 
 	 * @return The maximum broadcast distance in meters
 	 */
+	@Override
 	public int getMaxBroadcastDistance() {
 		return _maxBroadcastDistance;
 	}
@@ -45,6 +53,7 @@ public class UserPreferences {
 	 * 
 	 * @return The maximum receiving distance in meters
 	 */
+	@Override
 	public int getMaxReceiveDistance() {
 		return _maxReceiveDistance;
 	}
@@ -54,6 +63,7 @@ public class UserPreferences {
 	 * 
 	 * @return The server address
 	 */
+	@Override
 	public String getServerAddress() {
 		return _serverAddress;
 	}
@@ -64,6 +74,7 @@ public class UserPreferences {
 	 * @return The intervall in seconds in which the server should be asked for
 	 *         new messages
 	 */
+	@Override
 	public int getUpdateIntervall() {
 		return _updateIntervall;
 	}

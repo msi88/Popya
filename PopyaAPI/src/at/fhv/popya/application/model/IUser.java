@@ -2,8 +2,6 @@ package at.fhv.popya.application.model;
 
 import java.io.BufferedInputStream;
 
-import at.fhv.popya.application.model.impl.Location;
-
 /**
  * Interface for the user class.
  * 

@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
 import at.fhv.popya.application.model.IUser;
+import at.fhv.popya.application.model.Location;
 
 /**
  * The user entity which represents the current chat user.

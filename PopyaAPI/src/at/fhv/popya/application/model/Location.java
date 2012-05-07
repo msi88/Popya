@@ -1,4 +1,4 @@
-package at.fhv.popya.application.model.impl;
+package at.fhv.popya.application.model;
 
 /**
  * 

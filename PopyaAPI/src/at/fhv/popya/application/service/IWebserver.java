@@ -3,8 +3,8 @@ package at.fhv.popya.application.service;
 import java.util.List;
 
 import at.fhv.popya.application.model.IUser;
-import at.fhv.popya.application.model.impl.Message;
-import at.fhv.popya.application.model.impl.UserPreferences;
+import at.fhv.popya.application.model.IUserPreferences;
+import at.fhv.popya.application.model.Message;
 
 /**
  * Interface for webserver interaction.
@@ -23,7 +23,7 @@ public interface IWebserver {
 	 *            The user
 	 * @return A list of all available chat partners
 	 */
-	public List<IUser> connect(UserPreferences preferences, IUser user);
+	public List<IUser> connect(IUserPreferences preferences, IUser user);
 
 	/**
 	 * Get all available messages based on the location of the user.
