@@ -3,6 +3,7 @@
 	<name>PopyaWebserver</name>
 	<comment></comment>
 	<projects>
+		<project>PopyaAPI</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

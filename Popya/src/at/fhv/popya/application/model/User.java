@@ -1,11 +1,10 @@
-package at.fhv.popya.application.model.impl;
+package at.fhv.popya.application.model;
 
 import java.io.BufferedInputStream;
 
 import android.graphics.Bitmap;
 import android.location.LocationManager;
-import at.fhv.popya.application.model.IUser;
-import at.fhv.popya.application.model.Location;
+import at.fhv.popya.application.model.LocationTO;
 
 /**
  * The user entity which represents the current chat user.
@@ -13,7 +12,7 @@ import at.fhv.popya.application.model.Location;
  * @author Michael
  * @version 1.0
  */
-public class User implements IUser {
+public class User {
 
 	private final String _chatName;
 	private final String _description;
@@ -41,28 +40,23 @@ public class User implements IUser {
 		_locationManager = locationManager;
 	}
 
-	@Override
 	public String getChatName() {
 		return "";
 	}
 
-	@Override
 	public String getDescription() {
 		return "";
 	}
 
-	@Override
 	public BufferedInputStream getImage() {
 		return null;
 	}
 
-	@Override
 	public String getProfile() {
 		return null;
 	}
 
-	@Override
-	public Location getCurrentLocation() {
+	public LocationTO getCurrentLocation() {
 		// TODO Auto-generated method stub
 		return null;
 	}

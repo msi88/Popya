@@ -3,11 +3,10 @@ package at.fhv.popya.application.service.background;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhv.popya.application.model.IUser;
-import at.fhv.popya.application.model.Location;
+import at.fhv.popya.application.model.LocationTO;
 import at.fhv.popya.application.model.Message;
-import at.fhv.popya.application.model.impl.UserPreferences;
-import at.fhv.popya.application.service.IWebserver;
+import at.fhv.popya.application.model.UserTO;
+import at.fhv.popya.application.model.UserPreferencesTO;
 
 /**
  * Background service for messaging.
@@ -16,8 +15,6 @@ import at.fhv.popya.application.service.IWebserver;
  * @version 1.0
  */
 public class MessagingService {
-
-	private IWebserver _webserver;
 
 	/**
 	 * Default constructor.
@@ -36,8 +33,8 @@ public class MessagingService {
 	 * @return A list of all available chat partners or an empty list if no chat
 	 *         partner can be found
 	 */
-	public List<IUser> connect(UserPreferences preferences, IUser user) {
-		return new ArrayList<IUser>();
+	public List<UserTO> connect(UserPreferencesTO preferences, UserTO user) {
+		return new ArrayList<UserTO>();
 	}
 
 	/**
@@ -48,7 +45,7 @@ public class MessagingService {
 	 * @return A list of all available messages based on my location or an empty
 	 *         list if no messages are available
 	 */
-	public List<Message<?>> getMessages(Location location) {
+	public List<Message<?>> getMessages(LocationTO location) {
 		return new ArrayList<Message<?>>();
 	}
 
@@ -60,7 +57,7 @@ public class MessagingService {
 	 * @param user
 	 *            The user which has sent the message
 	 */
-	public void sendMessage(Message<?> message, IUser user) {
+	public void sendMessage(Message<?> message, UserTO user) {
 
 	}
 

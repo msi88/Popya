@@ -2,9 +2,14 @@ package at.fhv.popya.application.service;
 
 import java.util.List;
 
-import at.fhv.popya.application.model.IUser;
-import at.fhv.popya.application.model.IUserPreferences;
-import at.fhv.popya.application.model.Message;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
+
+import at.fhv.popya.application.model.MessageTO;
+import at.fhv.popya.application.model.UserPreferencesTO;
+import at.fhv.popya.application.model.UserTO;
 
 /**
  * Interface for webserver interaction.
@@ -12,6 +17,8 @@ import at.fhv.popya.application.model.Message;
  * @author Michael
  * @version 1.0
  */
+@WebService
+@SOAPBinding(style = Style.DOCUMENT)
 public interface IWebserver {
 
 	/**
@@ -23,7 +30,8 @@ public interface IWebserver {
 	 *            The user
 	 * @return A list of all available chat partners
 	 */
-	public List<IUser> connect(IUserPreferences preferences, IUser user);
+	@WebMethod
+	public List<UserTO> connect(UserPreferencesTO preferences, UserTO user);
 
 	/**
 	 * Get all available messages based on the location of the user.
@@ -32,7 +40,8 @@ public interface IWebserver {
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
 	 */
-	public List<Message<?>> getMessages(IUser user);
+	@WebMethod
+	public List<MessageTO<?>> getMessages(UserTO user);
 
 	/**
 	 * Send a message.
@@ -42,6 +51,7 @@ public interface IWebserver {
 	 * @param message
 	 *            The message which should be sent
 	 */
-	public void sendMessage(IUser user, Message<?> message);
+	@WebMethod
+	public void sendMessage(UserTO user, MessageTO<?> message);
 
 }

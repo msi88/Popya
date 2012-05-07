@@ -6,6 +6,6 @@ package at.fhv.popya.application.model;
  * 
  * @author Michael Sieber
  */
-public class Location {
+public class LocationTO {
 
 }

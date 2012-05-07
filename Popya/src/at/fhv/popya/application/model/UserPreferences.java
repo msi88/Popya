@@ -1,6 +1,4 @@
-package at.fhv.popya.application.model.impl;
-
-import at.fhv.popya.application.model.IUserPreferences;
+package at.fhv.popya.application.model;
 
 /**
  * The user preferences.
@@ -8,7 +6,7 @@ import at.fhv.popya.application.model.IUserPreferences;
  * @author Michael
  * @version 1.0
  */
-public class UserPreferences implements IUserPreferences {
+public class UserPreferences {
 
 	private final int _maxBroadcastDistance;
 	private final int _maxReceiveDistance;
@@ -43,7 +41,6 @@ public class UserPreferences implements IUserPreferences {
 	 * 
 	 * @return The maximum broadcast distance in meters
 	 */
-	@Override
 	public int getMaxBroadcastDistance() {
 		return _maxBroadcastDistance;
 	}
@@ -53,7 +50,6 @@ public class UserPreferences implements IUserPreferences {
 	 * 
 	 * @return The maximum receiving distance in meters
 	 */
-	@Override
 	public int getMaxReceiveDistance() {
 		return _maxReceiveDistance;
 	}
@@ -63,7 +59,6 @@ public class UserPreferences implements IUserPreferences {
 	 * 
 	 * @return The server address
 	 */
-	@Override
 	public String getServerAddress() {
 		return _serverAddress;
 	}
@@ -74,7 +69,6 @@ public class UserPreferences implements IUserPreferences {
 	 * @return The intervall in seconds in which the server should be asked for
 	 *         new messages
 	 */
-	@Override
 	public int getUpdateIntervall() {
 		return _updateIntervall;
 	}
