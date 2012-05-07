@@ -12,6 +12,7 @@ public class UserTO {
 	private final String _description;
 	private final byte[] _picture;
 	private final LocationTO _currentLocation;
+	private final UserPreferencesTO _preferences;
 
 	/**
 	 * Create a new user.
@@ -26,11 +27,12 @@ public class UserTO {
 	 *            The current location of the user
 	 */
 	public UserTO(String chatName, String description, byte[] picture,
-			LocationTO currentLocation) {
+			LocationTO currentLocation, UserPreferencesTO preferences) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;
 		_currentLocation = currentLocation;
+		_preferences = preferences;
 	}
 
 	public String getChatName() {
@@ -51,5 +53,9 @@ public class UserTO {
 
 	public LocationTO getCurrentLocation() {
 		return _currentLocation;
+	}
+
+	public UserPreferencesTO getPreferences() {
+		return _preferences;
 	}
 }
