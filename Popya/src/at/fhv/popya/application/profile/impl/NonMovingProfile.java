@@ -2,7 +2,7 @@ package at.fhv.popya.application.profile.impl;
 
 import java.util.List;
 
-import at.fhv.popya.application.model.LocationTO;
+import android.location.Location;
 import at.fhv.popya.application.profile.IMovingProfile;
 
 /**
@@ -21,7 +21,7 @@ public class NonMovingProfile implements IMovingProfile {
 	}
 
 	@Override
-	public IMovingProfile checkState(List<LocationTO> locations) {
+	public IMovingProfile checkState(List<Location> locations) {
 		return null;
 	}
 

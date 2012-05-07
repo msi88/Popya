@@ -2,7 +2,7 @@ package at.fhv.popya.application.profile;
 
 import java.util.List;
 
-import at.fhv.popya.application.model.LocationTO;
+import android.location.Location;
 
 /**
  * Interface for all moving profiles.
@@ -22,7 +22,7 @@ public interface IMovingProfile {
 	 *            The locations which where used to check the state
 	 * @return The new moving state
 	 */
-	public IMovingProfile checkState(List<LocationTO> locations);
+	public IMovingProfile checkState(List<Location> locations);
 
 	/**
 	 * Get the speed in km/h.
