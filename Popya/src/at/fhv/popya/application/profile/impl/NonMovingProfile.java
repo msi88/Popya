@@ -20,12 +20,10 @@ public class NonMovingProfile implements IMovingProfile {
 
 	}
 
-	@Override
 	public IMovingProfile checkState(List<Location> locations) {
 		return null;
 	}
 
-	@Override
 	public int getSpeed() {
 		return 0;
 	}

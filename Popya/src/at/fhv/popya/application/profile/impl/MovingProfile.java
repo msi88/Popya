@@ -20,7 +20,6 @@ public class MovingProfile implements IMovingProfile {
 
 	}
 
-	@Override
 	public IMovingProfile checkState(List<Location> locations) {
 		return null;
 	}
@@ -35,7 +34,6 @@ public class MovingProfile implements IMovingProfile {
 		return 0;
 	}
 
-	@Override
 	public int getSpeed() {
 		return 0;
 	}
