@@ -3,10 +3,10 @@ package at.fhv.popya.application.service.background;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhv.popya.application.model.LocationTO;
 import at.fhv.popya.application.model.Message;
-import at.fhv.popya.application.model.UserTO;
-import at.fhv.popya.application.model.UserPreferencesTO;
+import at.fhv.popya.application.transfer.LocationTO;
+import at.fhv.popya.application.transfer.UserPreferencesTO;
+import at.fhv.popya.application.transfer.UserTO;
 
 /**
  * Background service for messaging.

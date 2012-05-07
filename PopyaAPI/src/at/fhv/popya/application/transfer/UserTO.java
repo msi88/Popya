@@ -1,4 +1,4 @@
-package at.fhv.popya.application.model;
+package at.fhv.popya.application.transfer;
 
 /**
  * The user transfer object which represents the current chat user.

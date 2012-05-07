@@ -1,4 +1,4 @@
-package at.fhv.popya.application.model;
+package at.fhv.popya.application.transfer;
 
 /**
  * The user preferences transfer object.

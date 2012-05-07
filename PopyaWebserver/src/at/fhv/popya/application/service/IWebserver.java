@@ -7,9 +7,9 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
-import at.fhv.popya.application.model.MessageTO;
-import at.fhv.popya.application.model.UserPreferencesTO;
-import at.fhv.popya.application.model.UserTO;
+import at.fhv.popya.application.transfer.MessageTO;
+import at.fhv.popya.application.transfer.UserPreferencesTO;
+import at.fhv.popya.application.transfer.UserTO;
 
 /**
  * Interface for webserver interaction.
