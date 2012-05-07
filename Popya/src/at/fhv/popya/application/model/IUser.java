@@ -1,6 +1,8 @@
-package at.fhv.popya.application.entity;
+package at.fhv.popya.application.model;
 
 import java.io.BufferedInputStream;
+
+import at.fhv.popya.application.model.impl.Location;
 
 /**
  * Interface for the user class.
@@ -18,18 +20,11 @@ public interface IUser {
 	public String getChatName();
 
 	/**
-	 * Get the users current longitude value.
+	 * Get the current location of the user.
 	 * 
-	 * @return The longitude value
+	 * @return The current location of the user
 	 */
-	public String getCurrentLongitude();
-
-	/**
-	 * Get the users current altitude value.
-	 * 
-	 * @return The altitude value
-	 */
-	public String getCurrentAltitude();
+	public Location getCurrentLocation();
 
 	/**
 	 * Get the user description.

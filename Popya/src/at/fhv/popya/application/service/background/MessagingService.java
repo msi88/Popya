@@ -3,10 +3,10 @@ package at.fhv.popya.application.service.background;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.location.Location;
-import at.fhv.popya.application.entity.IUser;
-import at.fhv.popya.application.entity.impl.Message;
-import at.fhv.popya.application.entity.impl.UserPreferences;
+import at.fhv.popya.application.model.IUser;
+import at.fhv.popya.application.model.impl.Location;
+import at.fhv.popya.application.model.impl.Message;
+import at.fhv.popya.application.model.impl.UserPreferences;
 import at.fhv.popya.application.service.IWebserver;
 
 /**
@@ -29,8 +29,10 @@ public class MessagingService {
 	/**
 	 * Connect to the webserver.
 	 * 
-	 * @param preferences The user preferences
-	 * @param user The user
+	 * @param preferences
+	 *            The user preferences
+	 * @param user
+	 *            The user
 	 * @return A list of all available chat partners or an empty list if no chat
 	 *         partner can be found
 	 */
@@ -41,7 +43,8 @@ public class MessagingService {
 	/**
 	 * Get all available messages based on my location.
 	 * 
-	 * @param location The location
+	 * @param location
+	 *            The location
 	 * @return A list of all available messages based on my location or an empty
 	 *         list if no messages are available
 	 */
@@ -52,8 +55,10 @@ public class MessagingService {
 	/**
 	 * Send a message.
 	 * 
-	 * @param message The message which should be sent
-	 * @param user The user which has sent the message
+	 * @param message
+	 *            The message which should be sent
+	 * @param user
+	 *            The user which has sent the message
 	 */
 	public void sendMessage(Message<?> message, IUser user) {
 
