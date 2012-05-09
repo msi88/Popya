@@ -1,18 +1,28 @@
 package at.fhv.popya.application.transfer;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * The user transfer object which represents the current chat user.
  * 
  * @author Michael
  * @version 1.0
  */
+@XmlRootElement
 public class UserTO {
 
-	private final String _chatName;
-	private final String _description;
-	private final byte[] _picture;
-	private final LocationTO _currentLocation;
-	private final UserPreferencesTO _preferences;
+	private String _chatName;
+	private String _description;
+	private byte[] _picture;
+	private LocationTO _currentLocation;
+	private UserPreferencesTO _preferences;
+
+	/**
+	 * Default constructor.
+	 */
+	public UserTO() {
+		this(null, null, null, null, null);
+	}
 
 	/**
 	 * Create a new user.
@@ -39,23 +49,40 @@ public class UserTO {
 		return _chatName;
 	}
 
+	public void setChatName(String chatName) {
+		_chatName = chatName;
+	}
+
 	public String getDescription() {
 		return _description;
 	}
 
-	public byte[] getImage() {
+	public void setDescription(String description) {
+		_description = description;
+	}
+
+	public byte[] getPicture() {
 		return _picture;
 	}
 
-	public String getProfile() {
-		return null;
+	public void setPicture(byte[] picture) {
+		_picture = picture;
 	}
 
 	public LocationTO getCurrentLocation() {
 		return _currentLocation;
 	}
 
+	public void setCurrentLocation(LocationTO currentLocation) {
+		_currentLocation = currentLocation;
+	}
+
 	public UserPreferencesTO getPreferences() {
 		return _preferences;
 	}
+
+	public void setPreferences(UserPreferencesTO preferences) {
+		_preferences = preferences;
+	}
+
 }
