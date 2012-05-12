@@ -1,29 +1,31 @@
 package at.fhv.popya.application.service.ws;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
+import android.util.Log;
 import at.fhv.popya.application.transfer.MessageTO;
+import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserPreferencesTO;
 import at.fhv.popya.application.transfer.UserTO;
+import at.fhv.popya.application.transfer.UsersTO;
+
+import com.google.gson.Gson;
 
 /**
- * Util class for webserver interaction.
+ * Util class for webserver interaction. see:
+ * http://www.josecgomez.com/2010/04/30
+ * /android-accessing-restfull-web-services-using-json/
  * 
  * @author Michael
  * 
  */
 public class WebserviceUtil {
-	private final static String NAMESPACE = "http://impl.service.application.popya.fhv.at/";
-	private final static String GET_MESSAGES_METHOD = "getMessages";
-	private final static String CONNECT_METHOD = "connect";
-	private final static String SEND_MESSAGE_METHOD = "sendMessage";
+	private final static String GET_MESSAGES_METHOD = "/getMessages";
+	private final static String CONNECT_METHOD = "/connect";
+	private final static String SEND_MESSAGE_METHOD = "/sendMessage";
 
 	/**
 	 * Connect to the server.
@@ -34,37 +36,27 @@ public class WebserviceUtil {
 	 *            The user
 	 * @return A list of all available chat partners
 	 */
-	@SuppressWarnings("unchecked")
-	public List<UserTO> connect(UserPreferencesTO preferences, UserTO user) {
-		SoapObject Request = new SoapObject(NAMESPACE, CONNECT_METHOD);
-		String url = preferences.getServerAddress();
+	public static List<UserTO> connect(UserPreferencesTO preferences,
+			UserTO user) {
+		WebService service = new WebService(user.getPreferences()
+				.getServerAddress() + CONNECT_METHOD);
 
-		// add parameters
-		PropertyInfo prefPi = new PropertyInfo();
-		prefPi.setName("preferences");
-		prefPi.setValue(preferences);
-		prefPi.setType(UserPreferencesTO.class);
-		Request.addProperty(prefPi);
+		// init the parameters
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("user", user);
+		params.put("preferences", preferences);
 
-		PropertyInfo userPi = new PropertyInfo();
-		userPi.setName("user");
-		userPi.setValue(user);
-		userPi.setType(UserTO.class);
-		Request.addProperty(userPi);
+		String response = service.webInvoke("", params);
 
-		// prepare transmission
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.setOutputSoapObject(Request);
-
-		// request
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
 		try {
-			androidHttpTransport.call(NAMESPACE + CONNECT_METHOD, envelope);
-			SoapObject response = (SoapObject) envelope.getResponse();
-			return (List<UserTO>) response.getProperty(0);
+			// Parse Response into our object
+			UsersTO users = new Gson().fromJson(response, UsersTO.class);
+
+			if (users != null) {
+				return users.getUsers();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.d("Error: ", e.getMessage());
 		}
 
 		return new ArrayList<UserTO>();
@@ -77,35 +69,29 @@ public class WebserviceUtil {
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
 	 */
-	@SuppressWarnings("unchecked")
-	public static List<MessageTO<?>> getMessages(UserTO user) {
-		SoapObject Request = new SoapObject(NAMESPACE, GET_MESSAGES_METHOD);
-		String url = user.getPreferences().getServerAddress();
+	public static List<MessageTO<Object>> getMessages(UserTO user) {
+		WebService service = new WebService(user.getPreferences()
+				.getServerAddress() + GET_MESSAGES_METHOD);
 
-		// add parameters
-		PropertyInfo pi = new PropertyInfo();
-		pi.setName("user");
-		pi.setValue(user);
-		pi.setType(UserTO.class);
-		Request.addProperty(pi);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("user", user);
 
-		// prepare transmission
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.setOutputSoapObject(Request);
+		String response = service.webInvoke("", params);
 
-		// request
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
 		try {
-			androidHttpTransport
-					.call(NAMESPACE + GET_MESSAGES_METHOD, envelope);
-			SoapObject response = (SoapObject) envelope.getResponse();
-			return (List<MessageTO<?>>) response.getProperty(0);
+			// Parse Response into our object
+			@SuppressWarnings("unchecked")
+			MessagesTO<Object> messages = new Gson().fromJson(response,
+					MessagesTO.class);
+
+			if (messages != null) {
+				return messages.getMessages();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.d("Error: ", e.getMessage());
 		}
 
-		return new ArrayList<MessageTO<?>>();
+		return new ArrayList<MessageTO<Object>>();
 	}
 
 	/**
@@ -116,36 +102,14 @@ public class WebserviceUtil {
 	 * @param message
 	 *            The message which should be sent
 	 */
-	public void sendMessage(UserTO user, MessageTO<?> message) {
-		SoapObject Request = new SoapObject(NAMESPACE, SEND_MESSAGE_METHOD);
-		String url = user.getPreferences().getServerAddress();
+	public static void sendMessage(UserTO user, MessageTO<?> message) {
+		WebService service = new WebService(user.getPreferences()
+				.getServerAddress() + SEND_MESSAGE_METHOD);
 
-		// add parameters
-		PropertyInfo userPi = new PropertyInfo();
-		userPi.setName("user");
-		userPi.setValue(user);
-		userPi.setType(UserTO.class);
-		Request.addProperty(userPi);
+		// init the parameters
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("message", message);
 
-		PropertyInfo messagePi = new PropertyInfo();
-		messagePi.setName("message");
-		messagePi.setValue(message);
-		messagePi.setType(MessageTO.class);
-		Request.addProperty(messagePi);
-
-		// prepare transmission
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.setOutputSoapObject(Request);
-
-		// request
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
-		try {
-			androidHttpTransport
-					.call(NAMESPACE + SEND_MESSAGE_METHOD, envelope);
-			envelope.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		service.webInvoke("", params);
 	}
 }

@@ -34,8 +34,8 @@ public class WebserverImpl implements IWebserver {
 
 	@POST
 	@Path("/getMessages")
-	@Produces({ MediaType.APPLICATION_XML })
-	@Consumes({ MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
 	public MessagesTO<Object> getMessages(UserTO user) {
 		MessagesTO<Object> messages = new MessagesTO<Object>();
