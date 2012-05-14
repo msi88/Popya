@@ -3,7 +3,9 @@ package at.fhv.popya;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.view.*;
@@ -24,11 +26,13 @@ public class PopyaActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 
 		// setContentView(R.layout.main);
-		setListAdapter(new MessageAdapter(this, R.layout.message_list_item,	Messages));
-
+		
 		ListView lv = getListView();
-		lv.setTextFilterEnabled(true);
-
+		
+		View v = getLayoutInflater().inflate(R.layout.message_list_footer, null);
+		lv.addFooterView(v);
+		lv.setAdapter(new MessageAdapter(this, R.layout.message_list_item,	Messages));
+		
 	}
 
 	// for testing purpose of the UI, can be removed once the background service is working.
