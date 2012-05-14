@@ -54,7 +54,7 @@ public class WebserverImpl implements IWebserver {
 	}
 
 	/**
-	 * Get all availabel chat partners for a specific user
+	 * Get all available chat partners for a specific user
 	 * 
 	 * @param user
 	 *            The user for whom all available chat partners should be loaded
@@ -111,6 +111,15 @@ public class WebserverImpl implements IWebserver {
 	private boolean canCommunicate(UserTO receiver, UserTO sender) {
 		// TODO implement
 		return true;
+	}
+
+	/**
+	 * Get all messages.
+	 * 
+	 * @return The messages
+	 */
+	public static Map<UserTO, List<MessageTO<Object>>> getMessages() {
+		return _messages;
 	}
 
 }
