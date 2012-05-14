@@ -1,15 +1,10 @@
 package at.fhv.popya.application.service;
 
-import java.util.List;
-
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
-
-import at.fhv.popya.application.transfer.MessageTO;
-import at.fhv.popya.application.transfer.UserPreferencesTO;
+import at.fhv.popya.application.transfer.ConnectionTO;
+import at.fhv.popya.application.transfer.MessageSenderTO;
+import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserTO;
+import at.fhv.popya.application.transfer.UsersTO;
 
 /**
  * Interface for webserver interaction.
@@ -17,21 +12,16 @@ import at.fhv.popya.application.transfer.UserTO;
  * @author Michael
  * @version 1.0
  */
-@WebService
-@SOAPBinding(style = Style.DOCUMENT)
 public interface IWebserver {
 
 	/**
 	 * Connect to the server.
 	 * 
-	 * @param preferences
-	 *            The user preferences
-	 * @param user
-	 *            The user
+	 * @param connection
+	 *            The connection initializer object
 	 * @return A list of all available chat partners
 	 */
-	@WebMethod
-	public List<UserTO> connect(UserPreferencesTO preferences, UserTO user);
+	public UsersTO connect(ConnectionTO connection);
 
 	/**
 	 * Get all available messages based on the location of the user.
@@ -40,18 +30,15 @@ public interface IWebserver {
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
 	 */
-	@WebMethod
-	public List<MessageTO<?>> getMessages(UserTO user);
+	public MessagesTO<Object> getMessages(UserTO user);
 
 	/**
 	 * Send a message.
 	 * 
-	 * @param user
-	 *            The user which is sending the message
 	 * @param message
-	 *            The message which should be sent
+	 *            The message object which contains the sending user and the
+	 *            message
 	 */
-	@WebMethod
-	public void sendMessage(UserTO user, MessageTO<?> message);
+	public void sendMessage(MessageSenderTO message);
 
 }

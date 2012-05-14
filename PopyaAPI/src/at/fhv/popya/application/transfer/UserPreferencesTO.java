@@ -1,17 +1,27 @@
 package at.fhv.popya.application.transfer;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * The user preferences transfer object.
  * 
  * @author Michael
  * @version 1.0
  */
+@XmlRootElement
 public class UserPreferencesTO {
 
-	private final int _maxBroadcastDistance;
-	private final int _maxReceiveDistance;
-	private final String _serverAddress;
-	private final int _updateIntervall;
+	private int _maxBroadcastDistance;
+	private int _maxReceiveDistance;
+	private String _serverAddress;
+	private int _updateIntervall;
+
+	/**
+	 * Default constructor.
+	 */
+	public UserPreferencesTO() {
+		this(0, 0, null, 0);
+	}
 
 	/**
 	 * Create new UserPreferences.
@@ -71,6 +81,22 @@ public class UserPreferencesTO {
 	 */
 	public int getUpdateIntervall() {
 		return _updateIntervall;
+	}
+
+	public void setMaxBroadcastDistance(int maxBroadcastDistance) {
+		_maxBroadcastDistance = maxBroadcastDistance;
+	}
+
+	public void setMaxReceiveDistance(int maxReceiveDistance) {
+		_maxReceiveDistance = maxReceiveDistance;
+	}
+
+	public void setServerAddress(String serverAddress) {
+		_serverAddress = serverAddress;
+	}
+
+	public void setUpdateIntervall(int updateIntervall) {
+		_updateIntervall = updateIntervall;
 	}
 
 }
