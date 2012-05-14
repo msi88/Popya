@@ -43,30 +43,26 @@ public class User implements ITransferable<UserTO> {
 	}
 
 	public String getChatName() {
-		return "";
+		return _chatName;
 	}
 
 	public String getDescription() {
-		return "";
+		return _description;
 	}
 
-	public BufferedInputStream getImage() {
-		return null;
+	public Bitmap getPicture() {
+		return _picture;
 	}
 
-	public String getProfile() {
-		return null;
-	}
-
-	public LocationTO getCurrentLocation() {
-		// TODO Auto-generated method stub
-		return null;
+	public LocationManager getLocationManager() {
+		return _locationManager;
 	}
 
 	@Override
 	public UserTO getTransferObject() {
-		return null;
 		// TODO Auto-generated method stub
+		return null;
 	}
+	
 
 }

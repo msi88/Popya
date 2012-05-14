@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
-
-</LinearLayout>
+<AbsoluteLayout
+	android:id="@+id/widget0"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView
+	android:id="@+id/widget32"
+	android:layout_width="320dp"
+	android:layout_height="383dp"
+	android:background="#ffffff"
+	android:layout_x="0dp"
+	android:layout_y="1dp">
+<ImageView
+	android:id="@+id/widget36"
+	android:layout_width="wrap_content"
+	android:layout_height="29dp" />
+<TextView
+	android:id="@+id/widget37"
+	android:layout_width="300dp"
+	android:layout_height="wrap_content"
+	android:text="Name"
+	android:textSize="18sp"
+	android:textColor="#ff333333"
+	android:gravity="left" />
+</ScrollView>
+<EditText
+	android:id="@+id/widget33"
+	android:layout_width="252dp"
+	android:layout_height="wrap_content"
+	android:text="EditText"
+	android:textSize="18sp"
+	android:layout_x="1dp"
+	android:layout_y="389dp" />
+<Button
+	android:id="@+id/widget34"
+	android:layout_width="66dp"
+	android:layout_height="wrap_content"
+	android:text="Button"
+	android:layout_x="253dp"
+	android:layout_y="389dp" />
+</AbsoluteLayout>

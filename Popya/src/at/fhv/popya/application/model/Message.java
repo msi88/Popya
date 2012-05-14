@@ -14,7 +14,8 @@ import at.fhv.popya.application.transfer.MessageTO;
 public class Message<T> implements ITransferable<MessageTO<T>> {
 	public static final String LANG_DE = "de";
 	public static final String LANG_EN = "en";
-
+	
+	private final User _user;
 	private final String _language;
 	private final T _message;
 
@@ -26,9 +27,10 @@ public class Message<T> implements ITransferable<MessageTO<T>> {
 	 * @param message
 	 *            The message which should be transported
 	 */
-	public Message(String language, T message) {
+	public Message(String language, T message, User user) {
 		_language = language;
 		_message = message;
+		_user = user;
 	}
 
 	/**
@@ -49,10 +51,12 @@ public class Message<T> implements ITransferable<MessageTO<T>> {
 		return _language;
 	}
 
-	@Override
 	public MessageTO<T> getTransferObject() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	public User get_user() {
+		return _user;
+	}
 }
