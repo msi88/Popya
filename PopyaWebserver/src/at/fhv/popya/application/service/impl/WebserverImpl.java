@@ -60,9 +60,12 @@ public class WebserverImpl implements IWebserver {
 	 *            The user for whom all available chat partners should be loaded
 	 */
 	private UsersTO getAllChatPartners(UserTO user) {
-		// FIXME test implementation
 		UsersTO out = new UsersTO();
-		out.getUsers().add(user);
+		for (UserTO partner : _messages.keySet()) {
+			if (canCommunicate(user, partner)) {
+				out.getUsers().add(partner);
+			}
+		}
 		return out;
 	}
 
