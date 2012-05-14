@@ -17,6 +17,7 @@ public class MessageTO<T> {
 
 	private String _language;
 	private T _message;
+	private T _user;
 
 	/**
 	 * Default constructor.
@@ -46,6 +47,17 @@ public class MessageTO<T> {
 	public T getMessage() {
 		return _message;
 	}
+	
+	/**
+	 * Get the user.
+	 * 
+	 * @return The user
+	 */
+	public T getUser() {
+		return _user;
+	}
+	
+		
 
 	/**
 	 * Get the language.
