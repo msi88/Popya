@@ -27,8 +27,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 public class WebService {
 
 	DefaultHttpClient httpClient;

@@ -4,26 +4,4 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <ScrollView
-        android:id="@+id/widget32"
-        android:layout_width="320dp"
-        android:layout_height="383dp"
-        android:layout_x="0dp"
-        android:layout_y="1dp"
-        android:background="#ffffff" >
-
-        <ImageView
-            android:id="@+id/widget36"
-            android:layout_width="wrap_content"
-            android:layout_height="29dp" />
-
-        <TextView
-            android:id="@+id/widget37"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="Name"
-            android:textColor="#ff333333"
-            android:textSize="18sp" />
-    </ScrollView>
 </AbsoluteLayout>

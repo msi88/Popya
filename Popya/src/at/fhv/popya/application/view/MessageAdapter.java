@@ -25,8 +25,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
-			LayoutInflater vi = (LayoutInflater) _context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater vi = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = vi.inflate(R.layout.message_list_item, null);
 		}
 
