@@ -4,7 +4,9 @@ import java.io.BufferedInputStream;
 
 import android.graphics.Bitmap;
 import android.location.LocationManager;
+import at.fhv.popya.application.model.transfer.ITransferable;
 import at.fhv.popya.application.transfer.LocationTO;
+import at.fhv.popya.application.transfer.UserTO;
 
 /**
  * The user entity which represents the current chat user.
@@ -12,7 +14,7 @@ import at.fhv.popya.application.transfer.LocationTO;
  * @author Michael
  * @version 1.0
  */
-public class User {
+public class User implements ITransferable<UserTO> {
 
 	private final String _chatName;
 	private final String _description;
@@ -59,6 +61,12 @@ public class User {
 	public LocationTO getCurrentLocation() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public UserTO getTransferObject() {
+		return null;
+		// TODO Auto-generated method stub
 	}
 
 }

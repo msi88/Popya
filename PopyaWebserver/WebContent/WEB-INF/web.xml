@@ -4,23 +4,17 @@ Inc.//DTD Web Application 2.3//EN"
 "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
  
 <web-app>
-    <listener>
-        <listener-class>
-                com.sun.xml.ws.transport.http.servlet.WSServletContextListener
-        </listener-class>
-    </listener>
-    <servlet>
-        <servlet-name>popya</servlet-name>
-        <servlet-class>
-        	com.sun.xml.ws.transport.http.servlet.WSServlet
-        </servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>popya</servlet-name>
-        <url-pattern>/popya</url-pattern>
-    </servlet-mapping>
-    <session-config>
-        <session-timeout>120</session-timeout>
-    </session-config>
+<servlet>
+    <servlet-name>Jersey REST Service</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>at.fhv.popya.application.service.impl</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Jersey REST Service</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
 </web-app>
