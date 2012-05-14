@@ -1,12 +1,15 @@
 package at.fhv.popya.application.model;
 
+import at.fhv.popya.application.model.transfer.ITransferable;
+import at.fhv.popya.application.transfer.UserPreferencesTO;
+
 /**
  * The user preferences.
  * 
  * @author Michael
  * @version 1.0
  */
-public class UserPreferences {
+public class UserPreferences implements ITransferable<UserPreferencesTO> {
 
 	private final int _maxBroadcastDistance;
 	private final int _maxReceiveDistance;
@@ -71,6 +74,12 @@ public class UserPreferences {
 	 */
 	public int getUpdateIntervall() {
 		return _updateIntervall;
+	}
+
+	@Override
+	public UserPreferencesTO getTransferObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
