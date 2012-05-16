@@ -1,11 +1,8 @@
 package at.fhv.popya.application.model;
 
-import java.io.BufferedInputStream;
-
 import android.graphics.Bitmap;
 import android.location.LocationManager;
 import at.fhv.popya.application.model.transfer.ITransferable;
-import at.fhv.popya.application.transfer.LocationTO;
 import at.fhv.popya.application.transfer.UserTO;
 
 /**
@@ -63,6 +60,5 @@ public class User implements ITransferable<UserTO> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 
 }
