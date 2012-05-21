@@ -17,6 +17,7 @@ public class User implements ITransferable<UserTO> {
 	private final String _description;
 	private final Bitmap _picture;
 	private final LocationManager _locationManager;
+	private final UserPreferences _preferences;
 
 	/**
 	 * Create a new user.
@@ -32,11 +33,12 @@ public class User implements ITransferable<UserTO> {
 	 *            location
 	 */
 	public User(String chatName, String description, Bitmap picture,
-			LocationManager locationManager) {
+			LocationManager locationManager, UserPreferences preferences) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;
 		_locationManager = locationManager;
+		_preferences = preferences;
 	}
 
 	public String getChatName() {
@@ -55,10 +57,14 @@ public class User implements ITransferable<UserTO> {
 		return _locationManager;
 	}
 
+	public UserPreferences get_preferences() {
+		return _preferences;
+	}
+
 	@Override
 	public UserTO getTransferObject() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO picture and location are null, fix this !
+		return new UserTO(this.getChatName(), this.getDescription(), null, null ,this.get_preferences().getTransferObject());
 	}
 
 }

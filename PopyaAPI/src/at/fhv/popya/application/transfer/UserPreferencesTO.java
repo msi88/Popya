@@ -20,7 +20,6 @@ public class UserPreferencesTO {
 	 * Default constructor.
 	 */
 	public UserPreferencesTO() {
-		this(0, 0, null, 0);
 	}
 
 	/**

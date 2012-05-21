@@ -36,8 +36,7 @@ public class UserTO {
 	 * @param currentLocation
 	 *            The current location of the user
 	 */
-	public UserTO(String chatName, String description, byte[] picture,
-			LocationTO currentLocation, UserPreferencesTO preferences) {
+	public UserTO(String chatName, String description, byte[] picture, LocationTO currentLocation, UserPreferencesTO preferences) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;

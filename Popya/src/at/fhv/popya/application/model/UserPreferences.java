@@ -78,8 +78,19 @@ public class UserPreferences implements ITransferable<UserPreferencesTO> {
 
 	@Override
 	public UserPreferencesTO getTransferObject() {
-		// TODO Auto-generated method stub
-		return null;
+
+		int i = 10;
+		UserPreferencesTO pref = new UserPreferencesTO();
+
+		pref.setMaxBroadcastDistance(100);
+		pref.setMaxReceiveDistance(100);
+		pref.setServerAddress(this.getServerAddress());
+		pref.setUpdateIntervall(this.getUpdateIntervall());
+		
+		return pref;
+
+		// return new
+		// UserPreferencesTO(this.getMaxBroadcastDistance(),this.getMaxReceiveDistance(),this.getServerAddress(),this.getUpdateIntervall());
 	}
 
 }

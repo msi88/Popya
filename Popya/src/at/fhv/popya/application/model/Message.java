@@ -54,7 +54,7 @@ public class Message<T> implements ITransferable<MessageTO<T>> {
 	@Override
 	public MessageTO<T> getTransferObject() {
 		// TODO Auto-generated method stub
-		return null;
+		return new MessageTO<T>(this.getLanguage(), this.getMessage());
 	}
 
 	public User get_user() {
