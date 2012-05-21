@@ -57,6 +57,12 @@ public class ServiceTest extends HttpServlet {
 			}
 		}
 
+		// add a clear button
+		out.println("<form method='POST' action='" + req.getContextPath()
+				+ "/clear'>");
+		out.println();
+		out.println("</form>");
+
 		out.println("</body></html>");
 	}
 }

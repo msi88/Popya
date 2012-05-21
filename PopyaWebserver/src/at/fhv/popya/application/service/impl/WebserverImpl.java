@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import at.fhv.popya.application.service.IWebserver;
 import at.fhv.popya.application.service.timer.GarbageTimer;
 import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.MessageSenderTO;
@@ -20,6 +19,7 @@ import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
+import at.fhv.popya.application.ws.IWebserver;
 
 import com.sun.jersey.spi.resource.Singleton;
 

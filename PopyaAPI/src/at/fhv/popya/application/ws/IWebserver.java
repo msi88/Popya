@@ -1,4 +1,4 @@
-package at.fhv.popya.application.service;
+package at.fhv.popya.application.ws;
 
 import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.MessageSenderTO;
