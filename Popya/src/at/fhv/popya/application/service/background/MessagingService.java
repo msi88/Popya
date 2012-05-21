@@ -3,6 +3,9 @@ package at.fhv.popya.application.service.background;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.transfer.LocationTO;
 import at.fhv.popya.application.transfer.UserPreferencesTO;
@@ -14,7 +17,7 @@ import at.fhv.popya.application.transfer.UserTO;
  * @author Michael
  * @version 1.0
  */
-public class MessagingService {
+public class MessagingService extends Service {
 
 	/**
 	 * Default constructor.
@@ -61,4 +64,11 @@ public class MessagingService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
 }

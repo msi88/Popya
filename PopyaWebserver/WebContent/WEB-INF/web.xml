@@ -13,8 +13,19 @@ Inc.//DTD Web Application 2.3//EN"
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  
+   <servlet>
+      <servlet-name>ServiceTest</servlet-name>
+      <servlet-class>at.fhv.popya.application.service.servlet.ServiceTest</servlet-class>
+   </servlet>
+   
   <servlet-mapping>
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>ServiceTest</servlet-name>
+      <url-pattern>/test/service</url-pattern>
+   </servlet-mapping>
 </web-app>

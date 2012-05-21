@@ -9,13 +9,13 @@ import android.widget.TextView;
 import at.fhv.popya.R;
 import at.fhv.popya.application.model.Message;
 
-public class MessageAdapter extends ArrayAdapter<Message> {
+public class MessageAdapter extends ArrayAdapter<Message<?>> {
 
-	private Message[] _messages;
-	private Context _context;
+	private final Message<?>[] _messages;
+	private final Context _context;
 
 	public MessageAdapter(Context context, int textViewResourceId,
-			Message[] messages) {
+			Message<?>[] messages) {
 		super(context, textViewResourceId, messages);
 		this._messages = messages;
 		this._context = context;
@@ -29,7 +29,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 			v = vi.inflate(R.layout.message_list_item, null);
 		}
 
-		Message msg = _messages[position];
+		Message<?> msg = _messages[position];
 		if (msg != null) {
 			TextView messg = (TextView) v.findViewById(R.id.message);
 			TextView user = (TextView) v.findViewById(R.id.username);

@@ -16,7 +16,6 @@
         android:id="@+id/btnMessage"
         android:layout_width="66dp"
         android:layout_height="wrap_content"
-        android:text="Send"
-        android:onClick="" />
+        android:text="Send" />
 
 </LinearLayout>
