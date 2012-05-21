@@ -20,6 +20,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.google.gson.Gson;
+import at.fhv.popya.application.service.http.*;
 
 /**
  * Util class for webserver interaction. see:
@@ -44,26 +45,25 @@ public class WebserviceUtil {
 	 * @return A list of all available chat partners
 	 */
 	public static List<UserTO> connect(ConnectionTO connection) {
-		WebService service = new WebService(connection.getPreferences().getServerAddress());
+		WebService service = new WebService(connection.getPreferences()
+				.getServerAddress());
 
 		// init the parameters
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("connection", connection);
 		
-		String response = service.webInvoke(CONNECT_METHOD, params);
-
-		try {
-			// Parse Response into our object
-			UsersTO users = new Gson().fromJson(response, UsersTO.class);
-
-			if (users != null) {
-				return users.getUsers();
-			}
-		} catch (Exception e) {
-			Log.d("Error: ", e.getMessage());
-		}
+		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("connection", new Gson().toJson(connection)));
+		Poster p = new Poster(params, connection.getPreferences().getServerAddress() + CONNECT_METHOD);
+		p.postData();
 		
-		
+		/*
+		 * String response = service.webInvoke(CONNECT_METHOD, params);
+		 * 
+		 * try { // Parse Response into our object UsersTO users = new
+		 * Gson().fromJson(response, UsersTO.class);
+		 * 
+		 * if (users != null) { return users.getUsers(); } } catch (Exception e)
+		 * { Log.d("Error: ", e.getMessage()); }
+		 */
 
 		return new ArrayList<UserTO>();
 	}
@@ -109,8 +109,9 @@ public class WebserviceUtil {
 	 *            The message which should be sent
 	 */
 	public static void sendMessage(UserTO user, MessageTO<?> message) {
-		
-		WebService service = new WebService(user.getPreferences().getServerAddress());
+
+		WebService service = new WebService(user.getPreferences()
+				.getServerAddress());
 
 		// init the parameters
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -118,7 +119,7 @@ public class WebserviceUtil {
 
 		service.webInvoke(SEND_MESSAGE_METHOD, params);
 	}
-	
+
 	/**
 	 * Send a message.
 	 * 
@@ -128,15 +129,15 @@ public class WebserviceUtil {
 	 *            The message which should be sent
 	 */
 	public static void sendMessage(MessageSenderTO message) {
-		
 
-		WebService service = new WebService(message.getUser().getPreferences().getServerAddress());
+		WebService service = new WebService(message.getUser().getPreferences()
+				.getServerAddress());
 
 		// init the parameters
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("message", message);
 
 		service.webInvoke(SEND_MESSAGE_METHOD, params);
-		
+
 	}
 }
