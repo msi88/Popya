@@ -17,13 +17,13 @@ public class MessageTO<T> {
 
 	private String _language;
 	private T _message;
-	private T _user;
+	private UserTO _user;
 
 	/**
 	 * Default constructor.
 	 */
 	public MessageTO() {
-		this(null, null);
+		this(null, null,null);
 	}
 
 	/**
@@ -34,9 +34,10 @@ public class MessageTO<T> {
 	 * @param message
 	 *            The message which should be transported
 	 */
-	public MessageTO(String language, T message) {
+	public MessageTO(String language, T message, UserTO user) {
 		_language = language;
 		_message = message;
+		_user = user;
 	}
 
 	/**
@@ -53,7 +54,7 @@ public class MessageTO<T> {
 	 * 
 	 * @return The user
 	 */
-	public T getUser() {
+	public UserTO getUser() {
 		return _user;
 	}
 	

@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import android.util.Log;
+import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserPreferencesTO;
 import at.fhv.popya.application.transfer.UserTO;
 import at.fhv.popya.application.transfer.UsersTO;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -103,13 +106,34 @@ public class WebserviceUtil {
 	 *            The message which should be sent
 	 */
 	public static void sendMessage(UserTO user, MessageTO<?> message) {
-		WebService service = new WebService(user.getPreferences()
-				.getServerAddress() + SEND_MESSAGE_METHOD);
+		
+		WebService service = new WebService(user.getPreferences().getServerAddress() + SEND_MESSAGE_METHOD);
 
 		// init the parameters
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("message", message);
 
 		service.webInvoke("", params);
+	}
+	
+	/**
+	 * Send a message.
+	 * 
+	 * @param user
+	 *            The user which is sending the message
+	 * @param message
+	 *            The message which should be sent
+	 */
+	public static void sendMessage(MessageSenderTO message) {
+		
+
+		WebService service = new WebService(message.getUser().getPreferences().getServerAddress() + SEND_MESSAGE_METHOD);
+
+		// init the parameters
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("message", message.getMessage());
+
+		service.webInvoke("", params);
+		
 	}
 }

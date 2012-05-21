@@ -31,7 +31,7 @@ public class SendMessageListener implements OnClickListener {
 		UserPreferences tempPref = new UserPreferences(100, 100,"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya", 1000);
 		
 		// Load real user
-		User tempUsr = new User("Luuk88", "Random dutch guy", null, null,tempPref);
+		User tempUsr = new User("Luuk88", "Random dutch guy",null, null,tempPref);
 		
 		// read language from settings
 		Message<String> msg = new Message<String>(Message.LANG_EN,TxtMessage.getText().toString(),tempUsr);
