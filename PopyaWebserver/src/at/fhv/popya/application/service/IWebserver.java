@@ -3,8 +3,8 @@ package at.fhv.popya.application.service;
 import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.MessagesTO;
+import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
-import at.fhv.popya.application.transfer.UsersTO;
 
 /**
  * Interface for webserver interaction.
@@ -19,9 +19,10 @@ public interface IWebserver {
 	 * 
 	 * @param connection
 	 *            The connection initializer object
-	 * @return A list of all available chat partners
+	 * @throws UserException
+	 *             Thrown if the user name is already in use
 	 */
-	public UsersTO connect(ConnectionTO connection);
+	public void connect(ConnectionTO connection) throws UserException;
 
 	/**
 	 * Get all available messages based on the location of the user.
@@ -30,7 +31,7 @@ public interface IWebserver {
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
 	 */
-	public MessagesTO<Object> getMessages(UserTO user);
+	public MessagesTO<Object> getMessages(UserTO user) throws UserException;
 
 	/**
 	 * Send a message.
