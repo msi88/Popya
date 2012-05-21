@@ -8,6 +8,7 @@ import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.model.UserPreferences;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
+import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.UserPreferencesTO;
 
@@ -28,7 +29,7 @@ public class SendMessageListener implements OnClickListener {
 
 		// load preferences from user itself next time
 		UserPreferences tempPref = new UserPreferences(100, 100,
-				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya",
+				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/",
 				1000);
 
 		// Load real user
@@ -39,8 +40,12 @@ public class SendMessageListener implements OnClickListener {
 		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage
 				.getText().toString(), tempUsr);
 
-		WebserviceUtil.connect(tempPref.getTransferObject(),
-				tempUsr.getTransferObject());
+		ConnectionTO con = new ConnectionTO();
+		
+		con.setUser(tempUsr.getTransferObject());
+		con.setPreferences(con.getUser().getPreferences() );
+		
+		WebserviceUtil.connect(con);
 
 		MessageSenderTO send = new MessageSenderTO();
 
@@ -50,5 +55,4 @@ public class SendMessageListener implements OnClickListener {
 		WebserviceUtil.sendMessage(send);
 
 	}
-
 }

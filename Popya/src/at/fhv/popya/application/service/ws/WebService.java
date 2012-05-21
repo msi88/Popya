@@ -57,15 +57,17 @@ public class WebService {
 	public String webInvoke(String methodName, Map<String, Object> params) {
 
 		JSONObject jsonObject = new JSONObject();
+		StringBuilder builder = new StringBuilder();
 
 		for (Map.Entry<String, Object> param : params.entrySet()) {
 			try {
+				builder.append(new Gson().toJson(param.getValue()));
 				jsonObject.put(param.getKey(), param.getValue());
 			} catch (JSONException e) {
 				Log.e("Groshie", "JSONException : " + e);
 			}
 		}
-		return webInvoke(methodName, jsonObject.toString(), "application/json");
+		return webInvoke(methodName, builder.toString(), "application/json");
 	}
 
 	private String webInvoke(String methodName, String data, String contentType) {
