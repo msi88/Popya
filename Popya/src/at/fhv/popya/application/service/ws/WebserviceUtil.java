@@ -131,7 +131,7 @@ public class WebserviceUtil {
 
 		// init the parameters
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("message", message.getMessage());
+		params.put("message", message);
 
 		service.webInvoke("", params);
 		

@@ -57,17 +57,5 @@ public class PopyaActivity extends ListActivity {
 			new Message(
 					"Luuk Wullink",
 					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)),
-			new Message(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)),
-			new Message<String>(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)),
-			new Message<String>(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
 					new User("Luuk88", "Random dutch guy", null, null, null)) };
 }
