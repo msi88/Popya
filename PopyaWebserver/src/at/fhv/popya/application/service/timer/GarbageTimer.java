@@ -15,7 +15,6 @@ import at.fhv.popya.application.transfer.UserTO;
  * @author Michael Sieber
  */
 public class GarbageTimer extends TimerTask {
-	private final int CLEAN_INTERVAL_SEC = 5 * 60;
 	private final Map<UserTO, List<MessageTO<Object>>> _clean;
 
 	/**

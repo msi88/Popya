@@ -84,4 +84,30 @@ public class UserTO {
 		_preferences = preferences;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_chatName == null) ? 0 : _chatName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserTO other = (UserTO) obj;
+		if (_chatName == null) {
+			if (other._chatName != null)
+				return false;
+		} else if (!_chatName.equals(other._chatName))
+			return false;
+		return true;
+	}
+
 }

@@ -12,14 +12,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import at.fhv.popya.application.service.IWebserver;
 import at.fhv.popya.application.service.timer.GarbageTimer;
 import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
+import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
-import at.fhv.popya.application.transfer.UsersTO;
+import at.fhv.popya.application.ws.IWebserver;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -34,8 +34,8 @@ public class WebserverImpl implements IWebserver {
 		_messages = new HashMap<UserTO, List<MessageTO<Object>>>();
 
 		// initialize the garbage timer for cleaning the messages
-		new Timer().schedule(new GarbageTimer(_messages), 1000,
-				CLEAN_INTERVAL_MILLISEC);
+		new Timer().schedule(new GarbageTimer(_messages),
+				CLEAN_INTERVAL_MILLISEC, CLEAN_INTERVAL_MILLISEC);
 	}
 
 	@POST
@@ -43,30 +43,14 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public UsersTO connect(ConnectionTO connection) {
+	public void connect(ConnectionTO connection) throws UserException {
 		// register user
 		if (!_messages.containsKey(connection.getUser())) {
 			List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
 			_messages.put(connection.getUser(), messageList);
+		} else {
+			throw new UserException("User name already in use.");
 		}
-
-		return getAllChatPartners(connection.getUser());
-	}
-
-	/**
-	 * Get all available chat partners for a specific user
-	 * 
-	 * @param user
-	 *            The user for whom all available chat partners should be loaded
-	 */
-	private UsersTO getAllChatPartners(UserTO user) {
-		UsersTO out = new UsersTO();
-		for (UserTO partner : _messages.keySet()) {
-			if (canCommunicate(user, partner)) {
-				out.getUsers().add(partner);
-			}
-		}
-		return out;
 	}
 
 	@POST
@@ -74,7 +58,10 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public MessagesTO<Object> getMessages(UserTO user) {
+	public MessagesTO<Object> getMessages(UserTO user) throws UserException {
+		if (!_messages.containsKey(user)) {
+			throw new UserException("User is not connected.");
+		}
 
 		// get the messages
 		MessagesTO<Object> messages = new MessagesTO<Object>();

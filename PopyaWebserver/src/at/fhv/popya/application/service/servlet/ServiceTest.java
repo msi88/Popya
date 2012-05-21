@@ -26,6 +26,12 @@ public class ServiceTest extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		// check if the map should be cleared
+		if (req.getParameter("clear") != null
+				&& !req.getParameter("clear").isEmpty()) {
+			WebserverImpl.getMessages().clear();
+		}
+
 		// get the writer
 		PrintWriter out = resp.getWriter();
 
@@ -57,6 +63,18 @@ public class ServiceTest extends HttpServlet {
 			}
 		}
 
+		// add a clear button
+		out.println("<form method='POST' action='" + req.getContextPath()
+				+ "/test/service'>");
+		out.println("<input type='submit' name='clear' value='Clear messages'/>");
+		out.println("</form>");
+
 		out.println("</body></html>");
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		doGet(req, resp);
 	}
 }

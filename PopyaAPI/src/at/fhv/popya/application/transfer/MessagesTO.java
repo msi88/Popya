@@ -23,7 +23,7 @@ public class MessagesTO<T> {
 
 	@XmlElement(name = "Item")
 	public void setMessages(List<MessageTO<T>> messages) {
-		_messages = messages;
+		_messages = new ArrayList<MessageTO<T>>(messages);
 	}
 
 }
