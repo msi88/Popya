@@ -1,7 +1,6 @@
 package at.fhv.popya.application.ws;
 
-import at.fhv.popya.application.transfer.ConnectionTO;
-import at.fhv.popya.application.transfer.MessageSenderTO;
+import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
@@ -17,12 +16,12 @@ public interface IWebserver {
 	/**
 	 * Connect to the server.
 	 * 
-	 * @param connection
-	 *            The connection initializer object
+	 * @param user
+	 *            The user which wants to connect
 	 * @throws UserException
 	 *             Thrown if the user name is already in use
 	 */
-	public void connect(ConnectionTO connection) throws UserException;
+	public void connect(UserTO user) throws UserException;
 
 	/**
 	 * Get all available messages based on the location of the user.
@@ -40,6 +39,6 @@ public interface IWebserver {
 	 *            The message object which contains the sending user and the
 	 *            message
 	 */
-	public void sendMessage(MessageSenderTO message);
+	public void sendMessage(MessageTO<Object> message);
 
 }

@@ -7,14 +7,13 @@ import java.util.Map;
 import java.util.Timer;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import at.fhv.popya.application.service.timer.GarbageTimer;
-import at.fhv.popya.application.transfer.ConnectionTO;
-import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserException;
@@ -43,11 +42,11 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public void connect(ConnectionTO connection) throws UserException {
+	public void connect(@FormParam("user") UserTO user) throws UserException {
 		// register user
-		if (!_messages.containsKey(connection.getUser())) {
+		if (!_messages.containsKey(user)) {
 			List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
-			_messages.put(connection.getUser(), messageList);
+			_messages.put(user, messageList);
 		} else {
 			throw new UserException("User name already in use.");
 		}
@@ -58,7 +57,8 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public MessagesTO<Object> getMessages(UserTO user) throws UserException {
+	public MessagesTO<Object> getMessages(@FormParam("user") UserTO user)
+			throws UserException {
 		if (!_messages.containsKey(user)) {
 			throw new UserException("User is not connected.");
 		}
@@ -77,10 +77,10 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public void sendMessage(MessageSenderTO message) {
+	public void sendMessage(@FormParam("message") MessageTO<Object> message) {
 		for (UserTO receiver : _messages.keySet()) {
 			if (canCommunicate(receiver, message.getUser())) {
-				_messages.get(receiver).add(message.getMessage());
+				_messages.get(receiver).add(message);
 			}
 		}
 
