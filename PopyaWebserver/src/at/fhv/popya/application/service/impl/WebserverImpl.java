@@ -1,10 +1,9 @@
 package at.fhv.popya.application.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -13,28 +12,28 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import at.fhv.popya.application.service.timer.GarbageTimer;
+import at.fhv.popya.application.service.helper.LocationHelper;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
 import at.fhv.popya.application.ws.IWebserver;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.sun.jersey.spi.resource.Singleton;
 
 @Singleton
 @Path("/popya")
 public class WebserverImpl implements IWebserver {
-	private static Map<UserTO, List<MessageTO<Object>>> _messages;
-	private static final int CLEAN_INTERVAL_MILLISEC = 5 * 60 * 1000;
+	private static final int CLEAN_INTERVAL_MINUTES = 10;
+	private static Cache<UserTO, List<MessageTO<Object>>> _messages;
 
 	static {
 		// list with all users and their received messages
-		_messages = new HashMap<UserTO, List<MessageTO<Object>>>();
-
-		// initialize the garbage timer for cleaning the messages
-		new Timer().schedule(new GarbageTimer(_messages),
-				CLEAN_INTERVAL_MILLISEC, CLEAN_INTERVAL_MILLISEC);
+		_messages = CacheBuilder.newBuilder().concurrencyLevel(4).weakKeys()
+				.expireAfterWrite(CLEAN_INTERVAL_MINUTES, TimeUnit.MINUTES)
+				.build();
 	}
 
 	@POST
@@ -44,7 +43,7 @@ public class WebserverImpl implements IWebserver {
 	@Override
 	public void connect(@FormParam("user") UserTO user) throws UserException {
 		// register user
-		if (!_messages.containsKey(user)) {
+		if (!_messages.asMap().containsKey(user)) {
 			List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
 			_messages.put(user, messageList);
 		} else {
@@ -59,16 +58,16 @@ public class WebserverImpl implements IWebserver {
 	@Override
 	public MessagesTO<Object> getMessages(@FormParam("user") UserTO user)
 			throws UserException {
-		if (!_messages.containsKey(user)) {
+		if (!_messages.asMap().containsKey(user)) {
 			throw new UserException("User is not connected.");
 		}
 
 		// get the messages
 		MessagesTO<Object> messages = new MessagesTO<Object>();
-		messages.setMessages(_messages.get(user));
+		messages.setMessages(_messages.asMap().get(user));
 
 		// reset the message list
-		_messages.get(user).clear();
+		_messages.asMap().get(user).clear();
 		return messages;
 	}
 
@@ -78,9 +77,9 @@ public class WebserverImpl implements IWebserver {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
 	public void sendMessage(@FormParam("message") MessageTO<Object> message) {
-		for (UserTO receiver : _messages.keySet()) {
+		for (UserTO receiver : _messages.asMap().keySet()) {
 			if (canCommunicate(receiver, message.getUser())) {
-				_messages.get(receiver).add(message);
+				_messages.asMap().get(receiver).add(message);
 			}
 		}
 
@@ -96,8 +95,18 @@ public class WebserverImpl implements IWebserver {
 	 * @return True if receiver and sender can communicate
 	 */
 	private boolean canCommunicate(UserTO receiver, UserTO sender) {
-		// TODO implement
-		return true;
+		if (receiver.getPreferences() != null
+				&& sender.getPreferences() != null) {
+			// calculate the distance
+			double distance = LocationHelper.getDistanceInMeters(
+					receiver.getCurrentLocation(), sender.getCurrentLocation());
+
+			// check if they can communicate
+			return (receiver.getPreferences().getMaxReceiveDistance() <= distance)
+					&& (sender.getPreferences().getMaxBroadcastDistance() >= distance);
+		}
+
+		return false;
 	}
 
 	/**
@@ -106,7 +115,7 @@ public class WebserverImpl implements IWebserver {
 	 * @return The messages
 	 */
 	public static Map<UserTO, List<MessageTO<Object>>> getMessages() {
-		return _messages;
+		return _messages.asMap();
 	}
 
 }

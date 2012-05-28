@@ -27,19 +27,23 @@ public class LocationHelper {
 	 * @return The distance between the two points in km.
 	 */
 	public static double getDistanceInMeters(LocationTO first, LocationTO second) {
-		double dLat = Math.toRadians((first.getLatitude() - second
-				.getLatitude()));
-		double dLon = Math.toRadians((first.getLongitude() - second
-				.getLongitude()));
+		if (first != null && second != null) {
+			double dLat = Math.toRadians((first.getLatitude() - second
+					.getLatitude()));
+			double dLon = Math.toRadians((first.getLongitude() - second
+					.getLongitude()));
 
-		double lat1 = Math.toRadians(first.getLatitude());
-		double lat2 = Math.toRadians(second.getLatitude());
+			double lat1 = Math.toRadians(first.getLatitude());
+			double lat2 = Math.toRadians(second.getLatitude());
 
-		double a = (Math.sin(dLat / 2) * Math.sin(dLat / 2))
-				+ (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math
-						.cos(lat2));
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			double a = (Math.sin(dLat / 2) * Math.sin(dLat / 2))
+					+ (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math
+							.cos(lat2));
+			double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-		return EARTH_RADIUS_IN_KM * c;
+			return EARTH_RADIUS_IN_KM * c;
+		}
+
+		return Integer.MAX_VALUE;
 	}
 }
