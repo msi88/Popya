@@ -82,9 +82,7 @@ public class WebService {
 		StringEntity tmp = null;
 
 		// httpPost.setHeader("User-Agent", "SET YOUR USER AGENT STRING HERE");
-		httpPost.setHeader(
-				"Accept",
-				"text/html,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+		httpPost.setHeader("Accept","text/html,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
 
 		if (contentType != null) {
 			httpPost.setHeader("Content-Type", contentType);
@@ -106,7 +104,7 @@ public class WebService {
 		try {
 			response = httpClient.execute(httpPost, localContext);
 
-			if (response != null) {
+			if (response.getEntity() != null) {
 				ret = EntityUtils.toString(response.getEntity());
 			}
 		} catch (Exception e) {

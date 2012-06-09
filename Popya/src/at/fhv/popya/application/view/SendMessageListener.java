@@ -28,17 +28,14 @@ public class SendMessageListener implements OnClickListener {
 		UserPreferencesTO to = new UserPreferencesTO();
 
 		// load preferences from user itself next time
-		UserPreferences tempPref = new UserPreferences(100, 100,
-				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/",
-				1000);
+		UserPreferences tempPref = new UserPreferences(100, 100,"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/",1000);
 
 		// Load real user
 		User tempUsr = new User("Luuk88", "Random dutch guy", null, null,
 				tempPref);
 
 		// read language from settings
-		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage
-				.getText().toString(), tempUsr);
+		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage.getText().toString(), tempUsr);
 
 		ConnectionTO con = new ConnectionTO();
 		

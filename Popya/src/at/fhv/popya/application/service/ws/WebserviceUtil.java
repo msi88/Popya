@@ -130,8 +130,7 @@ public class WebserviceUtil {
 	 */
 	public static void sendMessage(MessageSenderTO message) {
 
-		WebService service = new WebService(message.getUser().getPreferences()
-				.getServerAddress());
+		WebService service = new WebService(message.getUser().getPreferences().getServerAddress());
 
 		// init the parameters
 		Map<String, Object> params = new HashMap<String, Object>();
