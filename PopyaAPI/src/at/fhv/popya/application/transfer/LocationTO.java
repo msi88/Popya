@@ -26,7 +26,7 @@ public class LocationTO {
 		return _longitude;
 	}
 
-	@XmlElement(name = "Longitude")
+	@XmlElement(name = "_longitude")
 	public void setLongitude(double longitude) {
 		_longitude = longitude;
 	}
@@ -35,7 +35,7 @@ public class LocationTO {
 		return _latitude;
 	}
 
-	@XmlElement(name = "Latitude")
+	@XmlElement(name = "_latitude")
 	public void setLatitude(double latitude) {
 		_latitude = latitude;
 	}
@@ -44,7 +44,7 @@ public class LocationTO {
 		return _altitude;
 	}
 
-	@XmlElement(name = "Altitude")
+	@XmlElement(name = "_altitude")
 	public void setAltitude(double altitude) {
 		_altitude = altitude;
 	}

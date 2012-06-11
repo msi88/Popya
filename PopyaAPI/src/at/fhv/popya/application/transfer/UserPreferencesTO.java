@@ -1,5 +1,6 @@
 package at.fhv.popya.application.transfer;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -82,18 +83,22 @@ public class UserPreferencesTO {
 		return _updateIntervall;
 	}
 
+	@XmlElement(name = "_maxBroadcastDistance")
 	public void setMaxBroadcastDistance(int maxBroadcastDistance) {
 		_maxBroadcastDistance = maxBroadcastDistance;
 	}
 
+	@XmlElement(name = "_description")
 	public void setMaxReceiveDistance(int maxReceiveDistance) {
 		_maxReceiveDistance = maxReceiveDistance;
 	}
 
+	@XmlElement(name = "_maxReceiveDistance")
 	public void setServerAddress(String serverAddress) {
 		_serverAddress = serverAddress;
 	}
 
+	@XmlElement(name = "_updateIntervall")
 	public void setUpdateIntervall(int updateIntervall) {
 		_updateIntervall = updateIntervall;
 	}

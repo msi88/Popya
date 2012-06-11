@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -38,16 +37,19 @@ public class WebserverImpl implements IWebserver {
 
 	@POST
 	@Path("/connect")
-	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public void connect(@FormParam("user") UserTO user) throws UserException {
-		// register user
-		if (!_messages.asMap().containsKey(user)) {
-			List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
-			_messages.put(user, messageList);
+	public void connect(UserTO user) throws UserException {
+		if (user != null) {
+			// register user
+			if (!_messages.asMap().containsKey(user)) {
+				List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
+				_messages.put(user, messageList);
+			} else {
+				throw new UserException("User name already in use.");
+			}
 		} else {
-			throw new UserException("User name already in use.");
+			throw new UserException("User may not be null.");
 		}
 	}
 
@@ -56,33 +58,35 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public MessagesTO<Object> getMessages(@FormParam("user") UserTO user)
-			throws UserException {
-		if (!_messages.asMap().containsKey(user)) {
-			throw new UserException("User is not connected.");
+	public MessagesTO<Object> getMessages(UserTO user) throws UserException {
+		if (user != null) {
+			if (!_messages.asMap().containsKey(user)) {
+				throw new UserException("User is not connected.");
+			}
+
+			// get the messages
+			MessagesTO<Object> messages = new MessagesTO<Object>();
+			messages.setMessages(_messages.asMap().get(user));
+
+			// reset the message list
+			_messages.asMap().get(user).clear();
+			return messages;
 		}
-
-		// get the messages
-		MessagesTO<Object> messages = new MessagesTO<Object>();
-		messages.setMessages(_messages.asMap().get(user));
-
-		// reset the message list
-		_messages.asMap().get(user).clear();
-		return messages;
+		throw new UserException("User may not be null.");
 	}
 
 	@POST
 	@Path("/sendMessage")
-	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public void sendMessage(@FormParam("message") MessageTO<Object> message) {
-		for (UserTO receiver : _messages.asMap().keySet()) {
-			if (canCommunicate(receiver, message.getUser())) {
-				_messages.asMap().get(receiver).add(message);
+	public void sendMessage(MessageTO<Object> message) {
+		if (message != null) {
+			for (UserTO receiver : _messages.asMap().keySet()) {
+				if (canCommunicate(receiver, message.getUser())) {
+					_messages.asMap().get(receiver).add(message);
+				}
 			}
 		}
-
 	}
 
 	/**

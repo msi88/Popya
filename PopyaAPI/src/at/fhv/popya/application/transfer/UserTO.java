@@ -1,5 +1,6 @@
 package at.fhv.popya.application.transfer;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -36,7 +37,8 @@ public class UserTO {
 	 * @param currentLocation
 	 *            The current location of the user
 	 */
-	public UserTO(String chatName, String description, byte[] picture, LocationTO currentLocation, UserPreferencesTO preferences) {
+	public UserTO(String chatName, String description, byte[] picture,
+			LocationTO currentLocation, UserPreferencesTO preferences) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;
@@ -48,6 +50,7 @@ public class UserTO {
 		return _chatName;
 	}
 
+	@XmlElement(name = "_chatName")
 	public void setChatName(String chatName) {
 		_chatName = chatName;
 	}
@@ -56,6 +59,7 @@ public class UserTO {
 		return _description;
 	}
 
+	@XmlElement(name = "_description")
 	public void setDescription(String description) {
 		_description = description;
 	}
@@ -64,6 +68,7 @@ public class UserTO {
 		return _picture;
 	}
 
+	@XmlElement(name = "_picture")
 	public void setPicture(byte[] picture) {
 		_picture = picture;
 	}
@@ -72,6 +77,7 @@ public class UserTO {
 		return _currentLocation;
 	}
 
+	@XmlElement(name = "_currentLocation")
 	public void setCurrentLocation(LocationTO currentLocation) {
 		_currentLocation = currentLocation;
 	}
@@ -80,6 +86,7 @@ public class UserTO {
 		return _preferences;
 	}
 
+	@XmlElement(name = "_preferences")
 	public void setPreferences(UserPreferencesTO preferences) {
 		_preferences = preferences;
 	}

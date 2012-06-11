@@ -21,7 +21,7 @@ public class MessagesTO<T> {
 		return _messages;
 	}
 
-	@XmlElement(name = "Item")
+	@XmlElement(name = "_messages")
 	public void setMessages(List<MessageTO<T>> messages) {
 		_messages = new ArrayList<MessageTO<T>>(messages);
 	}

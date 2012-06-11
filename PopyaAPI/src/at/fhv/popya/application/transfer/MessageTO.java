@@ -1,5 +1,6 @@
 package at.fhv.popya.application.transfer;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,7 +24,7 @@ public class MessageTO<T> {
 	 * Default constructor.
 	 */
 	public MessageTO() {
-		this(null, null,null);
+		this(null, null, null);
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class MessageTO<T> {
 	public T getMessage() {
 		return _message;
 	}
-	
+
 	/**
 	 * Get the user.
 	 * 
@@ -57,8 +58,11 @@ public class MessageTO<T> {
 	public UserTO getUser() {
 		return _user;
 	}
-	
-		
+
+	@XmlElement(name = "_user")
+	public void setUser(UserTO user) {
+		_user = user;
+	}
 
 	/**
 	 * Get the language.
@@ -69,10 +73,12 @@ public class MessageTO<T> {
 		return _language;
 	}
 
+	@XmlElement(name = "_language")
 	public void setLanguage(String language) {
 		_language = language;
 	}
 
+	@XmlElement(name = "_message")
 	public void setMessage(T message) {
 		_message = message;
 	}
