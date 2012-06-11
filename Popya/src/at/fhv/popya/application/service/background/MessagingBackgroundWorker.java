@@ -10,15 +10,15 @@ import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.settings.Settings;
 
-public class MessagingBackgroundWorker extends AsyncTask<Void, Void, List<Message<Object>>> {
+public class MessagingBackgroundWorker extends AsyncTask<Void, Void, List<MessageTO<Object>>> {
 
 	     protected void onPostExecute() {
 	     }
 
 		@Override
-		protected List<Message<Object>> doInBackground(Void... params) {
+		protected List<MessageTO<Object>> doInBackground(Void... params) {
 
-			List<Message<Object>> returnMessages = new ArrayList<Message<Object>>();
+			List<MessageTO<Object>> transferMessages = new ArrayList<MessageTO<Object>>();
 			
 			if(MessagingService.getMessageSendQueue() != null && MessagingService.getMessageSendQueue().size() > 0)
 			{
@@ -31,21 +31,16 @@ public class MessagingBackgroundWorker extends AsyncTask<Void, Void, List<Messag
 						e.printStackTrace();
 					}				
 				}
-							
-				List<MessageTO<Object>> transferMessages = WebserviceUtil.getMessages(Settings.getUser().getTransferObject());
-				
-				while(returnMessages.size() < transferMessages.size())
-				{
-					returnMessages.add((Message<Object>)returnMessages.get(returnMessages.size()).getMessage() );
-				}
-				
-
+				transferMessages = WebserviceUtil.getMessages(Settings.getUser().getTransferObject());
 		}
-			return returnMessages;
+			return transferMessages;
 	 }
 
-		protected void onPostExecute (List<Message<Object>> result)
+		protected void onPostExecute (List<MessageTO<Object>> result)
 		{
-			MessagingService.Service.setMessages(result);		
+			for(MessageTO<Object> msg : result)
+			{
+				MessagingService.addMessages(((Message<Object>)msg.getMessage()));
+			}	
 		}
 }

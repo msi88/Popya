@@ -11,6 +11,7 @@ import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
 import at.fhv.popya.application.transfer.LocationTO;
 import at.fhv.popya.application.transfer.UserException;
+import at.fhv.popya.application.transfer.UserTO;
 import at.fhv.popya.settings.Settings;
 
 /**
@@ -24,9 +25,14 @@ public class MessagingService extends Service {
 	private static List<Message<Object>> Messages;
 	private static List<Message<Object>> MessageSendQueue;
 	public static MessagingService Service;
+	private boolean connected;
 
 	public static List<Message<Object>> getMessages() {
 		return Messages;
+	}
+
+	public static void addMessages(Message message) {
+		Messages.add(message);
 	}
 
 	public static void setMessages(List<Message<Object>> messages) {
@@ -41,7 +47,10 @@ public class MessagingService extends Service {
 	 * Default constructor.
 	 */
 	public MessagingService() {
-		this.Service = this;
+		MessagingService.Service = this;
+		this.connected = false;
+		MessagingService.MessageSendQueue = new ArrayList<Message<Object>>();
+		MessagingService.Messages = new ArrayList<Message<Object>>();
 	}
 
 	/**
@@ -54,9 +63,12 @@ public class MessagingService extends Service {
 	 * @return A list of all available chat partners or an empty list if no chat
 	 *         partner can be found
 	 */
-	public void connect() {
+	private void connect() {
+
 		try {
-			WebserviceUtil.connect(Settings.getUser().getTransferObject());
+			UserTO user = Settings.getUser().getTransferObject();
+			WebserviceUtil.connect(user);
+
 		} catch (UserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,6 +97,11 @@ public class MessagingService extends Service {
 	 *            The user which has sent the message
 	 */
 	public void sendMessage(Message<Object> message) {
+		if (!this.connected) {
+			this.connect();
+			this.connected = true;
+		}
+
 		MessageSendQueue.add(message);
 	}
 
@@ -118,6 +135,6 @@ public class MessagingService extends Service {
 	@Override
 	public void onStart(Intent intent, int startid) {
 
-			new MessagingBackgroundWorker().execute();
+		new MessagingBackgroundWorker().execute();
 	}
 }

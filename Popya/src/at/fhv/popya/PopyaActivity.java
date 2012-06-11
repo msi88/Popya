@@ -26,15 +26,11 @@ public class PopyaActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// setContentView(R.layout.main);
-
 		MessagingService service = new MessagingService();
-		service.connect();
 		
 		ListView lv = getListView();
 
-		View v = getLayoutInflater()
-				.inflate(R.layout.message_list_footer, null);
+		View v = getLayoutInflater().inflate(R.layout.message_list_footer, null);
 		lv.addFooterView(v);
 		lv.setAdapter(new MessageAdapter(this, R.layout.message_list_item,Messages));
 
@@ -42,7 +38,6 @@ public class PopyaActivity extends ListActivity {
 		btnMessage.setOnClickListener(new SendMessageListener(v));
 
 		lv.setAdapter(new MessageAdapter(this, R.layout.message_list_item,Messages));
-
 	}
 
 	// for testing purpose of the UI, can be removed once the background service

@@ -24,10 +24,14 @@ public class Settings {
 	}
 
 	public static User getUser() {
+		if(Settings.user == null)
+			Settings.loadSettings();
+		
 		return user;
 	}
 
 	public static void setUser(User user) {
+			
 		Settings.user = user;
 	}
 

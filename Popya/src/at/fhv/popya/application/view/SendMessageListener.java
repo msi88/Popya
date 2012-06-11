@@ -5,10 +5,10 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import at.fhv.popya.R;
 import at.fhv.popya.application.model.Message;
-import at.fhv.popya.application.model.User;
-import at.fhv.popya.application.model.UserPreferences;
+import at.fhv.popya.application.service.background.MessagingService;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
-import at.fhv.popya.application.transfer.UserPreferencesTO;
+import at.fhv.popya.application.transfer.UserException;
+import at.fhv.popya.settings.Settings;
 
 public class SendMessageListener implements OnClickListener {
 
@@ -23,22 +23,20 @@ public class SendMessageListener implements OnClickListener {
 
 		EditText TxtMessage = (EditText) _v.findViewById(R.id.txtMessage);
 
-		UserPreferencesTO to = new UserPreferencesTO();
-
-		// load preferences from user itself next time
-		UserPreferences tempPref = new UserPreferences(100, 100,"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/",1000);
-
-		// Load real user
-		User tempUsr = new User("Luuk88", "Random dutch guy", null, null,
-				tempPref);
-
 		// read language from settings
-		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage.getText().toString(), tempUsr);
+		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage
+				.getText().toString(), Settings.getUser());
 
 		try {
-			WebserviceUtil.connect(tempUsr.getTransferObject());
-
 			WebserviceUtil.sendMessage(msg.getTransferObject());
+		} catch (UserException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			MessagingService.Service.sendMessage(msg);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
