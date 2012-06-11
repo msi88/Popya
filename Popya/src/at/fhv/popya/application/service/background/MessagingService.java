@@ -9,10 +9,8 @@ import android.os.IBinder;
 import android.widget.Toast;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
-import at.fhv.popya.application.transfer.ConnectionTO;
 import at.fhv.popya.application.transfer.LocationTO;
-import at.fhv.popya.application.transfer.UserPreferencesTO;
-import at.fhv.popya.application.transfer.UserTO;
+import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.settings.Settings;
 
 /**
@@ -22,13 +20,11 @@ import at.fhv.popya.settings.Settings;
  * @version 1.0
  */
 public class MessagingService extends Service {
-	
+
 	private static List<Message<Object>> Messages;
 	private static List<Message<Object>> MessageSendQueue;
 	public static MessagingService Service;
-	
-	
-			
+
 	public static List<Message<Object>> getMessages() {
 		return Messages;
 	}
@@ -58,13 +54,13 @@ public class MessagingService extends Service {
 	 * @return A list of all available chat partners or an empty list if no chat
 	 *         partner can be found
 	 */
-	public List<UserTO> connect() {
-		ConnectionTO con = new ConnectionTO();
-		
-		con.setUser(Settings.getUser().getTransferObject());
-		con.setPreferences(Settings.getUserPreferences().getTransferObject());			
-		
-		return WebserviceUtil.connect(con);
+	public void connect() {
+		try {
+			WebserviceUtil.connect(Settings.getUser().getTransferObject());
+		} catch (UserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -76,7 +72,7 @@ public class MessagingService extends Service {
 	 *         list if no messages are available
 	 */
 	public List<Message<Object>> getMessages(LocationTO location) {
-	
+
 		return Messages;
 	}
 
@@ -96,7 +92,7 @@ public class MessagingService extends Service {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-	
+
 	@Override
 	public void onCreate() {
 
@@ -107,23 +103,21 @@ public class MessagingService extends Service {
 
 	@Override
 	public void onDestroy() {
-		
+
 		Messages = null;
 		MessageSendQueue = null;
-		
-		Toast.makeText(this, "Messaging service stopped", Toast.LENGTH_LONG).show();
-		
+
+		Toast.makeText(this, "Messaging service stopped", Toast.LENGTH_LONG)
+				.show();
+
 		/*
-		Log.d(TAG, "onDestroy");
-		player.stop();
-		*/
+		 * Log.d(TAG, "onDestroy"); player.stop();
+		 */
 	}
-	
+
 	@Override
 	public void onStart(Intent intent, int startid) {
 
-		while(true)
 			new MessagingBackgroundWorker().execute();
 	}
-
 }

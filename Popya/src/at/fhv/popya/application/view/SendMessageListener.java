@@ -8,13 +8,11 @@ import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.model.UserPreferences;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
-import at.fhv.popya.application.transfer.ConnectionTO;
-import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.UserPreferencesTO;
 
 public class SendMessageListener implements OnClickListener {
 
-	private View _v;
+	private final View _v;
 
 	public SendMessageListener(View v) {
 		_v = v;
@@ -37,19 +35,13 @@ public class SendMessageListener implements OnClickListener {
 		// read language from settings
 		Message<Object> msg = new Message<Object>(Message.LANG_EN, TxtMessage.getText().toString(), tempUsr);
 
-		ConnectionTO con = new ConnectionTO();
-		
-		con.setUser(tempUsr.getTransferObject());
-		con.setPreferences(con.getUser().getPreferences() );
-		
-		WebserviceUtil.connect(con);
+		try {
+			WebserviceUtil.connect(tempUsr.getTransferObject());
 
-		MessageSenderTO send = new MessageSenderTO();
-
-		send.setMessage(msg.getTransferObject());
-		send.setUser(tempUsr.getTransferObject());
-
-		WebserviceUtil.sendMessage(send);
+			WebserviceUtil.sendMessage(msg.getTransferObject());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 }

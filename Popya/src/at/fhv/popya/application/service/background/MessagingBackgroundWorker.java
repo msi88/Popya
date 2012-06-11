@@ -6,8 +6,8 @@ import java.util.List;
 import android.os.AsyncTask;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
-import at.fhv.popya.application.transfer.MessageSenderTO;
 import at.fhv.popya.application.transfer.MessageTO;
+import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.settings.Settings;
 
 public class MessagingBackgroundWorker extends AsyncTask<Void, Void, List<Message<Object>>> {
@@ -24,15 +24,13 @@ public class MessagingBackgroundWorker extends AsyncTask<Void, Void, List<Messag
 			{
 				for(Message<Object> message : MessagingService.getMessageSendQueue())
 				{
-				
-				MessageSenderTO send = new MessageSenderTO();
-
-				send.setMessage(message.getTransferObject());
-				send.setUser(Settings.getUser().getTransferObject());
-
-				WebserviceUtil.sendMessage(send);				
-
-			}
+					try {
+						WebserviceUtil.sendMessage(message.getTransferObject());
+					} catch (UserException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}				
+				}
 							
 				List<MessageTO<Object>> transferMessages = WebserviceUtil.getMessages(Settings.getUser().getTransferObject());
 				
