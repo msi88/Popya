@@ -3,9 +3,6 @@ package at.fhv.popya.application.service.ws;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.util.Log;
 import at.fhv.popya.application.service.ws.http.Poster;
 import at.fhv.popya.application.transfer.MessageTO;
@@ -39,10 +36,8 @@ public class WebserviceUtil {
 	 */
 	public static void connect(UserTO user) throws UserException {
 		// init the parameters
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("user", new Gson().toJson(user)));
-		Poster p = new Poster(params, user.getPreferences().getServerAddress()
-				+ CONNECT_METHOD);
+		Poster p = new Poster(new Gson().toJson(user), user.getPreferences()
+				.getServerAddress() + CONNECT_METHOD);
 		p.postData();
 	}
 
@@ -54,10 +49,8 @@ public class WebserviceUtil {
 	 * @return A list of all available messages for the specified user
 	 */
 	public static List<MessageTO<Object>> getMessages(UserTO user) {
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("user", new Gson().toJson(user)));
-		Poster p = new Poster(params, user.getPreferences().getServerAddress()
-				+ GET_MESSAGES_METHOD);
+		Poster p = new Poster(new Gson().toJson(user), user.getPreferences()
+				.getServerAddress() + GET_MESSAGES_METHOD);
 		String ret = p.postData();
 
 		try {
@@ -86,10 +79,8 @@ public class WebserviceUtil {
 	 */
 	public static void sendMessage(MessageTO<?> message) throws UserException {
 		// init the parameters
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("message", new Gson().toJson(message)));
-		Poster p = new Poster(params, message.getUser().getPreferences()
-				.getServerAddress()
+		Poster p = new Poster(new Gson().toJson(message), message.getUser()
+				.getPreferences().getServerAddress()
 				+ SEND_MESSAGE_METHOD);
 		p.postData();
 
