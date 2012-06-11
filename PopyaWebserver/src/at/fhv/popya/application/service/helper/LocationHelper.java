@@ -9,7 +9,7 @@ import at.fhv.popya.application.transfer.LocationTO;
  * @author Michael Sieber
  */
 public class LocationHelper {
-	private final static double EARTH_RADIUS_IN_KM = 6.371;
+	private final static double EARTH_RADIUS_IN_KM = 6371;
 
 	/**
 	 * Calculate the distance of to gps points with the help of the Haversine

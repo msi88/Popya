@@ -1,10 +1,9 @@
-package at.fhv.popya.application.service.http;
-
-import java.util.ArrayList;
+package at.fhv.popya.application.service.ws.http;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -18,8 +17,8 @@ import android.os.Message;
 
 public class Poster {
 	Message msg;
-	private ArrayList<NameValuePair> params;
-	private String url;
+	private final ArrayList<NameValuePair> params;
+	private final String url;
 
 	/**
 	 * Maak een poster aan
