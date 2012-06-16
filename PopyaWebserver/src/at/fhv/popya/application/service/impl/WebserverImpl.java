@@ -82,7 +82,12 @@ public class WebserverImpl implements IWebserver {
 	public void sendMessage(MessageTO<Object> message) {
 		if (message != null) {
 			for (UserTO receiver : _messages.asMap().keySet()) {
-				if (canCommunicate(receiver, message.getUser())) {
+
+				// check if the partners can communicate
+				// if the partner and the receiver are the same person also add
+				// the message
+				if (canCommunicate(receiver, message.getUser())
+						|| message.getUser().equals(receiver)) {
 					_messages.asMap().get(receiver).add(message);
 				}
 			}
