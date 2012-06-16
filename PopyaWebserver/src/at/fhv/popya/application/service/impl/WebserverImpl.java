@@ -31,7 +31,7 @@ public class WebserverImpl implements IWebserver {
 	static {
 		// list with all users and their received messages
 		_messages = CacheBuilder.newBuilder().concurrencyLevel(4).weakKeys()
-				.expireAfterWrite(CLEAN_INTERVAL_MINUTES, TimeUnit.MINUTES)
+				.expireAfterAccess(CLEAN_INTERVAL_MINUTES, TimeUnit.MINUTES)
 				.build();
 	}
 
