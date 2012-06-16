@@ -69,6 +69,6 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 
 	@Override
 	public void notify(List<Message<Object>> messages) {
-		// TODO Auto-generated method stub
+		// TODO update list view here!!
 	}
 }
