@@ -1,7 +1,9 @@
 package at.fhv.popya.application.service.background;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import android.app.Service;
 import android.content.Intent;
@@ -23,7 +25,7 @@ import at.fhv.popya.settings.Settings;
 public class MessagingService extends Service {
 
 	private static List<Message<Object>> Messages;
-	private static List<Message<Object>> MessageSendQueue;
+	private static Queue<Message<Object>> MessageSendQueue;
 	public static MessagingService Service;
 	private boolean connected;
 
@@ -31,7 +33,7 @@ public class MessagingService extends Service {
 		return Messages;
 	}
 
-	public static void addMessages(Message message) {
+	public static void addMessages(Message<Object> message) {
 		Messages.add(message);
 	}
 
@@ -39,7 +41,7 @@ public class MessagingService extends Service {
 		Messages = messages;
 	}
 
-	public static List<Message<Object>> getMessageSendQueue() {
+	public static Queue<Message<Object>> getMessageSendQueue() {
 		return MessageSendQueue;
 	}
 
@@ -49,7 +51,7 @@ public class MessagingService extends Service {
 	public MessagingService() {
 		MessagingService.Service = this;
 		this.connected = false;
-		MessagingService.MessageSendQueue = new ArrayList<Message<Object>>();
+		MessagingService.MessageSendQueue = new LinkedList<Message<Object>>();
 		MessagingService.Messages = new ArrayList<Message<Object>>();
 	}
 
@@ -102,7 +104,7 @@ public class MessagingService extends Service {
 			this.connected = true;
 		}
 
-		MessageSendQueue.add(message);
+		MessageSendQueue.offer(message);
 	}
 
 	@Override
@@ -114,7 +116,7 @@ public class MessagingService extends Service {
 	public void onCreate() {
 
 		Messages = new ArrayList<Message<Object>>();
-		MessageSendQueue = new ArrayList<Message<Object>>();
+		MessageSendQueue = new LinkedList<Message<Object>>();
 		Settings.loadSettings();
 	}
 
