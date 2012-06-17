@@ -69,7 +69,8 @@ public class WebserverImpl implements IWebserver {
 
 			// get the messages
 			MessagesTO<Object> messages = new MessagesTO<Object>();
-			messages.setMessages(_messages.get(user));
+			messages.setMessages(new ArrayList<MessageTO<Object>>(_messages
+					.get(user)));
 
 			// reset the message list
 			_messages.get(user).clear();
