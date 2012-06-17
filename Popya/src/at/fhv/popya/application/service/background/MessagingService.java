@@ -30,7 +30,6 @@ public class MessagingService extends Service {
 	private static List<IMessageListener> LISTENER;
 	private List<Message<Object>> _messages;
 	private static Queue<Message<Object>> MESSAGE_SEND_QUEUE;
-	private boolean _connected;
 
 	static {
 		LISTENER = new ArrayList<IMessageListener>();
@@ -65,20 +64,15 @@ public class MessagingService extends Service {
 
 	@Override
 	public void onCreate() {
-		_connected = false;
 		_messages = new ArrayList<Message<Object>>();
 		Settings.loadSettings();
+		connect();
 
 		// define task for sending messages
 		TimerTask senderTask = new TimerTask() {
 
 			@Override
 			public void run() {
-				if (!_connected) {
-					connect();
-					_connected = true;
-				}
-
 				if (MESSAGE_SEND_QUEUE != null) {
 					while (!MESSAGE_SEND_QUEUE.isEmpty()) {
 						try {
@@ -93,7 +87,7 @@ public class MessagingService extends Service {
 			}
 		};
 		Timer timer = new Timer();
-		timer.schedule(senderTask, 500, 5000);
+		timer.schedule(senderTask, 500, 10000);
 
 		// creating task for receiving messages
 		TimerTask receiverTask = new TimerTask() {

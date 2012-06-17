@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import at.fhv.popya.application.model.Message;
-import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.service.background.IMessageListener;
 import at.fhv.popya.application.service.background.MessagingService;
 import at.fhv.popya.application.view.MessageAdapter;
@@ -21,6 +20,8 @@ import at.fhv.popya.application.view.SendMessageListener;
  * @author Michael Sieber
  */
 public class PopyaActivity extends ListActivity implements IMessageListener {
+	private MessageAdapter _adapter;
+	private Intent _serviceIntent;
 
 	/**
 	 * {@inheritDoc}
@@ -35,40 +36,38 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		View v = getLayoutInflater()
 				.inflate(R.layout.message_list_footer, null);
 		lv.addFooterView(v);
-		lv.setAdapter(new MessageAdapter(this, R.layout.message_list_item,
-				Messages));
 
 		Button btnMessage = (Button) v.findViewById(R.id.btnMessage);
 		btnMessage.setOnClickListener(new SendMessageListener(v));
 
-		lv.setAdapter(new MessageAdapter(this, R.layout.message_list_item,
-				Messages));
+		_adapter = new MessageAdapter(this, R.layout.message_list_item);
+		lv.setAdapter(_adapter);
 
 		// start the service
-		startService(new Intent(this, MessagingService.class));
+		_serviceIntent = new Intent(this, MessagingService.class);
+		startService(_serviceIntent);
 
 		// register for messages
 		MessagingService.registerListener(this);
 	}
 
-	// for testing purpose of the UI, can be removed once the background service
-	// is working.
-	static final Message<?>[] Messages = new Message[] {
-			new Message<String>(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)),
-			new Message<String>(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)),
-			new Message<String>(
-					"Luuk Wullink",
-					"The owner of the restaurant contacted us since he would love to get in contact with native Koreans.",
-					new User("Luuk88", "Random dutch guy", null, null, null)) };
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopService(_serviceIntent);
+	}
 
 	@Override
-	public void notify(List<Message<Object>> messages) {
-		// TODO update list view here!!
+	public void notify(final List<Message<Object>> messages) {
+		// the notify call probably comes from an other thread, which cannot
+		// manipulate things on the ui thread. The following statement fixes
+		// this issue
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				_adapter.addMessages(messages);
+			}
+		});
 	}
 }
