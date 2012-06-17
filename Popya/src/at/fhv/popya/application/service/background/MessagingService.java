@@ -27,6 +27,7 @@ import at.fhv.popya.settings.Settings;
  * @version 1.0
  */
 public class MessagingService extends Service {
+	private static final long SENDING_INTERVAL = 5000;
 	private static List<IMessageListener> LISTENER;
 	private List<Message<Object>> _messages;
 	private static Queue<Message<Object>> MESSAGE_SEND_QUEUE;
@@ -87,7 +88,7 @@ public class MessagingService extends Service {
 			}
 		};
 		Timer timer = new Timer();
-		timer.schedule(senderTask, 500, 10000);
+		timer.schedule(senderTask, 500, SENDING_INTERVAL);
 
 		// creating task for receiving messages
 		TimerTask receiverTask = new TimerTask() {
@@ -114,8 +115,9 @@ public class MessagingService extends Service {
 	 */
 	private void notifyListener() {
 		for (IMessageListener listener : LISTENER) {
-			listener.notify(_messages);
+			listener.notify(new ArrayList<Message<Object>>(_messages));
 		}
+		_messages.clear();
 	}
 
 	@Override

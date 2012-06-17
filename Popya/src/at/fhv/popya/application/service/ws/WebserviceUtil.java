@@ -53,15 +53,31 @@ public class WebserviceUtil {
 				.getServerAddress() + GET_MESSAGES_METHOD);
 		String ret = p.postData();
 
-		try {
-			@SuppressWarnings("unchecked")
-			MessagesTO<Object> out = new Gson().fromJson(ret, MessagesTO.class);
+		if (ret != null && !ret.equals("null")) {
+			try {
+				// this fixes the wrong json output
+				ret = ret.replace("\"_messages\":", "\"_messages\":[")
+						.substring(0, ret.length() - 1) + "}]}";
 
-			if (out != null) {
-				return out.getMessages();
+				@SuppressWarnings("unchecked")
+				MessagesTO<Object> out = new Gson().fromJson(ret,
+						MessagesTO.class);
+
+				List<MessageTO<Object>> outList = new ArrayList<MessageTO<Object>>();
+
+				for (MessageTO<Object> messageTO : out.getMessages()) {
+					// fixes the generic type issue
+					@SuppressWarnings("unchecked")
+					Object message = ((com.google.gson.internal.StringMap<String>) messageTO
+							.getMessage()).get("$");
+					outList.add(new MessageTO<Object>(messageTO.getLanguage(),
+							message, messageTO.getUser()));
+				}
+
+				return outList;
+			} catch (Exception e) {
+				Log.d("Error: ", e.getMessage());
 			}
-		} catch (Exception e) {
-			Log.d("Error: ", e.getMessage());
 		}
 
 		return new ArrayList<MessageTO<Object>>();

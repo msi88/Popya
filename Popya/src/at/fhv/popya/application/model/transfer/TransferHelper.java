@@ -27,8 +27,13 @@ public class TransferHelper {
 				.getMaxReceiveDistance(), transfer.getPreferences()
 				.getServerAddress(), transfer.getPreferences()
 				.getUpdateIntervall());
-		Bitmap b = BitmapFactory.decodeByteArray(transfer.getPicture(), 0,
-				transfer.getPicture().length);
+
+		Bitmap b = null;
+		if (transfer.getPicture() != null) {
+			b = BitmapFactory.decodeByteArray(transfer.getPicture(), 0,
+					transfer.getPicture().length);
+		}
+
 		User user = new User(transfer.getChatName(), transfer.getDescription(),
 				b, null, prefs);
 
