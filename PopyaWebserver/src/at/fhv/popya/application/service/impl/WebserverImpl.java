@@ -3,6 +3,7 @@ package at.fhv.popya.application.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.Consumes;
@@ -26,13 +27,15 @@ import com.sun.jersey.spi.resource.Singleton;
 @Path("/popya")
 public class WebserverImpl implements IWebserver {
 	private static final int CLEAN_INTERVAL_MINUTES = 10;
-	private static Cache<UserTO, List<MessageTO<Object>>> _messages;
+	private static ConcurrentMap<UserTO, List<MessageTO<Object>>> _messages;
 
 	static {
 		// list with all users and their received messages
-		_messages = CacheBuilder.newBuilder().concurrencyLevel(4).weakKeys()
+		Cache<UserTO, List<MessageTO<Object>>> cache = CacheBuilder
+				.newBuilder().concurrencyLevel(20)
 				.expireAfterAccess(CLEAN_INTERVAL_MINUTES, TimeUnit.MINUTES)
 				.build();
+		_messages = cache.asMap();
 	}
 
 	@POST
@@ -42,7 +45,7 @@ public class WebserverImpl implements IWebserver {
 	public void connect(UserTO user) throws UserException {
 		if (user != null) {
 			// register user
-			if (!_messages.asMap().containsKey(user)) {
+			if (!_messages.containsKey(user)) {
 				List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
 				_messages.put(user, messageList);
 			} else {
@@ -60,16 +63,16 @@ public class WebserverImpl implements IWebserver {
 	@Override
 	public MessagesTO<Object> getMessages(UserTO user) throws UserException {
 		if (user != null) {
-			if (!_messages.asMap().containsKey(user)) {
+			if (!_messages.containsKey(user)) {
 				throw new UserException("User is not connected.");
 			}
 
 			// get the messages
 			MessagesTO<Object> messages = new MessagesTO<Object>();
-			messages.setMessages(_messages.asMap().get(user));
+			messages.setMessages(_messages.get(user));
 
 			// reset the message list
-			_messages.asMap().get(user).clear();
+			_messages.get(user).clear();
 			return messages;
 		}
 		throw new UserException("User may not be null.");
@@ -81,7 +84,7 @@ public class WebserverImpl implements IWebserver {
 	@Override
 	public void sendMessage(MessageTO<Object> message) {
 		if (message != null) {
-			for (UserTO receiver : _messages.asMap().keySet()) {
+			for (UserTO receiver : _messages.keySet()) {
 
 				// check if the partners can communicate
 				// if the partner and the receiver are the same person also add
@@ -94,7 +97,7 @@ public class WebserverImpl implements IWebserver {
 							.getMessage()).getFirstChild().getTextContent();
 					message.setMessage(txtMessage);
 
-					_messages.asMap().get(receiver).add(message);
+					_messages.get(receiver).add(message);
 				}
 			}
 		}
@@ -130,7 +133,7 @@ public class WebserverImpl implements IWebserver {
 	 * @return The messages
 	 */
 	public static Map<UserTO, List<MessageTO<Object>>> getMessages() {
-		return _messages.asMap();
+		return _messages;
 	}
 
 }
