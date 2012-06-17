@@ -67,14 +67,13 @@ public class WebserverImpl implements IWebserver {
 				throw new UserException("User is not connected.");
 			}
 
-			// get the messages
-			MessagesTO<Object> messages = new MessagesTO<Object>();
-			messages.setMessages(new ArrayList<MessageTO<Object>>(_messages
+			MessagesTO<Object> out = new MessagesTO<Object>();
+			out.setMessages(new ArrayList<MessageTO<Object>>(_messages
 					.get(user)));
 
 			// reset the message list
 			_messages.get(user).clear();
-			return messages;
+			return out;
 		}
 		throw new UserException("User may not be null.");
 	}
