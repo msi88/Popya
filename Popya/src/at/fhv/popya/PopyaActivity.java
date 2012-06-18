@@ -39,8 +39,8 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		getPrefs();
 		super.onCreate(savedInstanceState);
+		_serviceIntent = new Intent(this, MessagingService.class);
 
 		ListView lv = getListView();
 
@@ -55,13 +55,6 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		lv.setAdapter(_adapter);
 
 		initLocationManager();
-
-		// start the service
-		_serviceIntent = new Intent(this, MessagingService.class);
-		startService(_serviceIntent);
-
-		// register for messages
-		MessagingService.registerListener(this);
 	}
 
 	/**
@@ -83,6 +76,23 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 					android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			startActivity(intent);
 		}
+	}
+
+	/**
+	 * Restart the messaging servie
+	 */
+	private void restartMessagingService() {
+		stopService(_serviceIntent);
+		startService(_serviceIntent);
+
+		// register for messages
+		MessagingService.registerListener(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopService(_serviceIntent);
 	}
 
 	@Override
@@ -114,6 +124,8 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 				maxReceiveDistance, serverAddress, updateIntervall));
 		Settings.setUser(new User(chatName, description, null, null, Settings
 				.getUserPreferences()));
+
+		restartMessagingService();
 	}
 
 	@Override
@@ -138,12 +150,6 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		return true;
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		stopService(_serviceIntent);
 	}
 
 	@Override

@@ -32,6 +32,7 @@ public class MessagingService extends Service {
 	private static List<IMessageListener> LISTENER;
 	private List<Message<Object>> _messages;
 	private static Queue<Message<Object>> MESSAGE_SEND_QUEUE;
+	private Timer _timer = new Timer();
 
 	static {
 		LISTENER = new ArrayList<IMessageListener>();
@@ -65,7 +66,10 @@ public class MessagingService extends Service {
 	}
 
 	@Override
-	public void onCreate() {
+	public void onStart(Intent intent, int startId) {
+		super.onStart(intent, startId);
+		_timer.cancel();
+		_timer = new Timer();
 		_messages = new ArrayList<Message<Object>>();
 		connect();
 
@@ -90,8 +94,7 @@ public class MessagingService extends Service {
 				}
 			}
 		};
-		Timer timer = new Timer();
-		timer.schedule(senderTask, 500, SENDING_INTERVAL);
+		_timer.schedule(senderTask, 500, SENDING_INTERVAL);
 
 		// creating task for receiving messages
 		TimerTask receiverTask = new TimerTask() {
@@ -109,18 +112,25 @@ public class MessagingService extends Service {
 				notifyListener();
 			}
 		};
-		timer.schedule(receiverTask, 500, Settings.getUserPreferences()
+		_timer.schedule(receiverTask, 500, Settings.getUserPreferences()
 				.getUpdateIntervall());
+
+		Toast.makeText(this, "Messaging service started", Toast.LENGTH_LONG)
+				.show();
 	}
 
 	/**
 	 * Notify all listeners
 	 */
 	private void notifyListener() {
-		for (IMessageListener listener : LISTENER) {
-			listener.notify(new ArrayList<Message<Object>>(_messages));
+		if (LISTENER != null) {
+			if (_messages != null) {
+				for (IMessageListener listener : LISTENER) {
+					listener.notify(new ArrayList<Message<Object>>(_messages));
+				}
+				_messages.clear();
+			}
 		}
-		_messages.clear();
 	}
 
 	@Override
@@ -128,14 +138,10 @@ public class MessagingService extends Service {
 
 		_messages = null;
 		MESSAGE_SEND_QUEUE = null;
+		_timer.cancel();
 
 		Toast.makeText(this, "Messaging service stopped", Toast.LENGTH_LONG)
 				.show();
-	}
-
-	@Override
-	public void onStart(Intent intent, int startid) {
-
 	}
 
 	/**
@@ -145,6 +151,10 @@ public class MessagingService extends Service {
 	 *            The listener to register
 	 */
 	public static void registerListener(IMessageListener listener) {
+		if (LISTENER == null) {
+			LISTENER = new ArrayList<IMessageListener>();
+		}
+
 		if (!LISTENER.contains(listener)) {
 			LISTENER.add(listener);
 		}
@@ -169,6 +179,10 @@ public class MessagingService extends Service {
 	 *            The message to add to the queue
 	 */
 	public static void enqueueMessage(Message<Object> message) {
+		if (MESSAGE_SEND_QUEUE == null) {
+			MESSAGE_SEND_QUEUE = new LinkedList<Message<Object>>();
+		}
+
 		MESSAGE_SEND_QUEUE.offer(message);
 	}
 }

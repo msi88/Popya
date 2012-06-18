@@ -76,7 +76,7 @@ public class WebserviceUtil {
 
 				return outList;
 			} catch (Exception e) {
-				Log.d("Error: ", e.getMessage());
+				Log.d("Error", "Error during loading messages.", e);
 			}
 		}
 
