@@ -1,7 +1,11 @@
 package at.fhv.popya.settings;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import at.fhv.popya.PopyaSettingsActivity;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.model.UserPreferences;
+import at.fhv.popya.application.view.SendMessageListener;
 
 /* TODO:
  * Load settings from xml file or something.
@@ -23,23 +27,10 @@ public class Settings {
 	}
 
 	public static User getUser() {
-		if (Settings.user == null)
-			Settings.loadSettings();
-
 		return user;
 	}
 
 	public static void setUser(User user) {
-
 		Settings.user = user;
 	}
-
-	public static void loadSettings() {
-		Settings.setUserPreferences(new UserPreferences(100, 100,
-				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/",
-				1000));
-		Settings.setUser(new User("Luuk88", "Random dutch guy", null, null,
-				userPreferences));
-	}
-
 }
