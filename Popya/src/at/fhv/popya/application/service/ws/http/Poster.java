@@ -1,11 +1,17 @@
 package at.fhv.popya.application.service.ws.http;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.util.Log;
 
 public class Poster {
 	private final String _jsonParams;
@@ -29,7 +35,7 @@ public class Poster {
 	 * 
 	 * @return The json response string
 	 */
-	public String postData() {
+	public String postData() throws ClientProtocolException {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(_url);
@@ -44,8 +50,10 @@ public class Poster {
 			String response = httpclient.execute(httppost, handler);
 			return response;
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			Log.e(getClass().toString(), "Error posting data.", e);
+		} catch (IOException e) {
+			throw new ClientProtocolException(e);
 		}
 		return "";
 	}

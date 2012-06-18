@@ -10,12 +10,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
+import at.fhv.popya.application.service.UserException;
 import at.fhv.popya.application.service.helper.LocationHelper;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
-import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
 import at.fhv.popya.application.ws.IWebserver;
 
@@ -28,6 +30,7 @@ import com.sun.jersey.spi.resource.Singleton;
 public class WebserverImpl implements IWebserver {
 	private static final int CLEAN_INTERVAL_MINUTES = 10;
 	private static ConcurrentMap<UserTO, List<MessageTO<Object>>> _messages;
+	private final UriInfo _uriInfo;
 
 	static {
 		// list with all users and their received messages
@@ -38,21 +41,27 @@ public class WebserverImpl implements IWebserver {
 		_messages = cache.asMap();
 	}
 
+	public WebserverImpl(@Context UriInfo info) {
+		_uriInfo = info;
+	}
+
 	@POST
 	@Path("/connect")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public void connect(UserTO user) throws UserException {
+	public void connect(UserTO user) {
 		if (user != null) {
 			// register user
 			if (!_messages.containsKey(user)) {
 				List<MessageTO<Object>> messageList = new ArrayList<MessageTO<Object>>();
 				_messages.put(user, messageList);
 			} else {
-				throw new UserException("User name already in use.");
+				throw new UserException(_uriInfo.getBaseUriBuilder()
+						.path("/connect").build(), "User name already in use.");
 			}
 		} else {
-			throw new UserException("User may not be null.");
+			throw new UserException(_uriInfo.getBaseUriBuilder()
+					.path("/connect").build(), "User may not be null.");
 		}
 	}
 
@@ -61,10 +70,11 @@ public class WebserverImpl implements IWebserver {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Override
-	public MessagesTO<Object> getMessages(UserTO user) throws UserException {
+	public MessagesTO<Object> getMessages(UserTO user) {
 		if (user != null) {
 			if (!_messages.containsKey(user)) {
-				throw new UserException("User is not connected.");
+				throw new UserException(_uriInfo.getBaseUriBuilder()
+						.path("/getMessages").build(), "User is not connected.");
 			}
 
 			MessagesTO<Object> out = new MessagesTO<Object>();
@@ -75,7 +85,8 @@ public class WebserverImpl implements IWebserver {
 			_messages.get(user).clear();
 			return out;
 		}
-		throw new UserException("User may not be null.");
+		throw new UserException(_uriInfo.getBaseUriBuilder()
+				.path("/getMessages").build(), "User may not be null.");
 	}
 
 	@POST

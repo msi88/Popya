@@ -2,7 +2,6 @@ package at.fhv.popya.application.ws;
 
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
-import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
 
 /**
@@ -18,10 +17,8 @@ public interface IWebserver {
 	 * 
 	 * @param user
 	 *            The user which wants to connect
-	 * @throws UserException
-	 *             Thrown if the user name is already in use
 	 */
-	public void connect(UserTO user) throws UserException;
+	public void connect(UserTO user);
 
 	/**
 	 * Get all available messages based on the location of the user.
@@ -30,7 +27,7 @@ public interface IWebserver {
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
 	 */
-	public MessagesTO<Object> getMessages(UserTO user) throws UserException;
+	public MessagesTO<Object> getMessages(UserTO user);
 
 	/**
 	 * Send a message.

@@ -7,6 +7,8 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.http.client.ClientProtocolException;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -17,7 +19,6 @@ import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.transfer.TransferHelper;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
 import at.fhv.popya.application.transfer.MessageTO;
-import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
 import at.fhv.popya.settings.Settings;
 
@@ -55,7 +56,11 @@ public class MessagingService extends Service {
 			UserTO user = Settings.getUser().getTransferObject();
 			WebserviceUtil.connect(user);
 
-		} catch (UserException e) {
+		} catch (Exception e) {
+			Toast.makeText(
+					this,
+					"User name already in use. Please change your name in the settings",
+					Toast.LENGTH_LONG).show();
 			Log.e(getClass().toString(), "Error connecting to the server.", e);
 		}
 	}
@@ -86,7 +91,7 @@ public class MessagingService extends Service {
 							tmp.getUser().setCurrentLocation(
 									LocationHelper.getLocation());
 							WebserviceUtil.sendMessage(tmp);
-						} catch (UserException e) {
+						} catch (Exception e) {
 							Log.e(getClass().toString(),
 									"Error sending message.", e);
 						}
@@ -95,21 +100,29 @@ public class MessagingService extends Service {
 			}
 		};
 		_timer.schedule(senderTask, 500, SENDING_INTERVAL);
+		final MessagingService context = this;
 
 		// creating task for receiving messages
 		TimerTask receiverTask = new TimerTask() {
 
 			@Override
 			public void run() {
-				List<MessageTO<Object>> messages = WebserviceUtil
-						.getMessages(Settings.getUser().getTransferObject());
+				List<MessageTO<Object>> messages;
+				try {
+					messages = WebserviceUtil.getMessages(Settings.getUser()
+							.getTransferObject());
 
-				for (MessageTO<Object> messageTO : messages) {
-					_messages.add(new Message<Object>(messageTO.getLanguage(),
-							messageTO.getMessage(), TransferHelper
-									.getUser(messageTO.getUser())));
+					for (MessageTO<Object> messageTO : messages) {
+						_messages.add(new Message<Object>(messageTO
+								.getLanguage(), messageTO.getMessage(),
+								TransferHelper.getUser(messageTO.getUser())));
+					}
+					notifyListener();
+				} catch (ClientProtocolException e) {
+					Toast.makeText(context,
+							"User not logged in. Please try to reconnect.",
+							Toast.LENGTH_LONG).show();
 				}
-				notifyListener();
 			}
 		};
 		_timer.schedule(receiverTask, 500, Settings.getUserPreferences()

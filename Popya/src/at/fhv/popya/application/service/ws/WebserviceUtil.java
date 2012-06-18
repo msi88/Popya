@@ -3,11 +3,12 @@ package at.fhv.popya.application.service.ws;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+
 import android.util.Log;
 import at.fhv.popya.application.service.ws.http.Poster;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
-import at.fhv.popya.application.transfer.UserException;
 import at.fhv.popya.application.transfer.UserTO;
 
 import com.google.gson.Gson;
@@ -31,13 +32,15 @@ public class WebserviceUtil {
 	 * @param user
 	 *            The user
 	 * @return A list of all available chat partners
+	 * @throws ClientProtocolException
 	 * @throws UserException
 	 *             Thrown if the username already exists
 	 */
-	public static void connect(UserTO user) throws UserException {
+	public static void connect(UserTO user) throws ClientProtocolException {
 		// init the parameters
 		Poster p = new Poster(new Gson().toJson(user), user.getPreferences()
 				.getServerAddress() + CONNECT_METHOD);
+
 		p.postData();
 	}
 
@@ -47,8 +50,10 @@ public class WebserviceUtil {
 	 * @param user
 	 *            The user which is looking for new messages
 	 * @return A list of all available messages for the specified user
+	 * @throws ClientProtocolException
 	 */
-	public static List<MessageTO<Object>> getMessages(UserTO user) {
+	public static List<MessageTO<Object>> getMessages(UserTO user)
+			throws ClientProtocolException {
 		Poster p = new Poster(new Gson().toJson(user), user.getPreferences()
 				.getServerAddress() + GET_MESSAGES_METHOD);
 		String ret = p.postData();
@@ -93,7 +98,7 @@ public class WebserviceUtil {
 	 * @throws UserException
 	 *             Thrown if the user does not exist or was disconnected
 	 */
-	public static void sendMessage(MessageTO<?> message) throws UserException {
+	public static void sendMessage(MessageTO<?> message) throws Exception {
 		// init the parameters
 		Poster p = new Poster(new Gson().toJson(message), message.getUser()
 				.getPreferences().getServerAddress()
