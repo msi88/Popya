@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +33,7 @@ import at.fhv.popya.settings.Settings;
 public class PopyaActivity extends ListActivity implements IMessageListener {
 	private MessageAdapter _adapter;
 	private Intent _serviceIntent;
+	private OnSharedPreferenceChangeListener _prefListener;
 
 	/**
 	 * {@inheritDoc}
@@ -55,6 +57,21 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		lv.setAdapter(_adapter);
 
 		initLocationManager();
+		startService(_serviceIntent);
+
+		// SharedPreferences keeps listeners in a WeakHashMap. This means that
+		// you cannot use an anonymous inner class as a listener, as it will
+		// become the target of garbage collection as soon as you leave the
+		// current scope.
+		_prefListener = new OnSharedPreferenceChangeListener() {
+
+			@Override
+			public void onSharedPreferenceChanged(
+					SharedPreferences sharedPreferences, String key) {
+				getPrefs();
+				restartMessagingService();
+			}
+		};
 	}
 
 	/**
@@ -83,10 +100,18 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 	 */
 	private void restartMessagingService() {
 		stopService(_serviceIntent);
-		startService(_serviceIntent);
+		try {
+			synchronized (this) {
+				wait(1000);
+			}
+		} catch (InterruptedException e) {
+			// ignore
+		}
 
 		// register for messages
 		MessagingService.registerListener(this);
+
+		startService(_serviceIntent);
 	}
 
 	@Override
@@ -99,12 +124,20 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 	public void onStart() {
 		super.onStart();
 		getPrefs();
+		MessagingService.registerListener(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MessagingService.registerListener(this);
 	}
 
 	public void getPrefs() {
 		// Get the xml/preferences.xml preferences
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
+		prefs.registerOnSharedPreferenceChangeListener(_prefListener);
 
 		String chatName = prefs.getString("chatName", "Guest" + Math.random());
 		String description = prefs.getString("description",
@@ -124,8 +157,6 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 				maxReceiveDistance, serverAddress, updateIntervall));
 		Settings.setUser(new User(chatName, description, null, null, Settings
 				.getUserPreferences()));
-
-		restartMessagingService();
 	}
 
 	@Override

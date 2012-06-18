@@ -100,7 +100,6 @@ public class MessagingService extends Service {
 			}
 		};
 		_timer.schedule(senderTask, 500, SENDING_INTERVAL);
-		final MessagingService context = this;
 
 		// creating task for receiving messages
 		TimerTask receiverTask = new TimerTask() {
@@ -119,9 +118,8 @@ public class MessagingService extends Service {
 					}
 					notifyListener();
 				} catch (ClientProtocolException e) {
-					Toast.makeText(context,
-							"User not logged in. Please try to reconnect.",
-							Toast.LENGTH_LONG).show();
+					Log.e(getClass().toString(),
+							"User not logged in. Please try to reconnect.", e);
 				}
 			}
 		};
