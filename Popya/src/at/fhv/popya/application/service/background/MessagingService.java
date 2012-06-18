@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import at.fhv.popya.application.location.LocationHelper;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.transfer.TransferHelper;
 import at.fhv.popya.application.service.ws.WebserviceUtil;
@@ -76,8 +77,11 @@ public class MessagingService extends Service {
 				if (MESSAGE_SEND_QUEUE != null) {
 					while (!MESSAGE_SEND_QUEUE.isEmpty()) {
 						try {
-							WebserviceUtil.sendMessage(MESSAGE_SEND_QUEUE
-									.poll().getTransferObject());
+							MessageTO<?> tmp = MESSAGE_SEND_QUEUE.poll()
+									.getTransferObject();
+							tmp.getUser().setCurrentLocation(
+									LocationHelper.getLocation());
+							WebserviceUtil.sendMessage(tmp);
 						} catch (UserException e) {
 							Log.e(getClass().toString(),
 									"Error sending message.", e);

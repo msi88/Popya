@@ -22,6 +22,12 @@ public class LocationTO {
 
 	}
 
+	public LocationTO(double lat, double lang, double alt) {
+		_longitude = lang;
+		_latitude = lat;
+		_altitude = alt;
+	}
+
 	public double getLongitude() {
 		return _longitude;
 	}

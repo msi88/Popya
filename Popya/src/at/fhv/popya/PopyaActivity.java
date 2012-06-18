@@ -1,9 +1,11 @@
 package at.fhv.popya;
 
 import java.util.List;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import at.fhv.popya.application.location.LocationHelper;
 import at.fhv.popya.application.model.Message;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.model.UserPreferences;
@@ -51,12 +54,35 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		_adapter = new MessageAdapter(this, R.layout.message_list_item);
 		lv.setAdapter(_adapter);
 
+		initLocationManager();
+
 		// start the service
 		_serviceIntent = new Intent(this, MessagingService.class);
 		startService(_serviceIntent);
 
 		// register for messages
 		MessagingService.registerListener(this);
+	}
+
+	/**
+	 * Initialize the location manager
+	 */
+	private void initLocationManager() {
+		// init the location helper
+		LocationHelper.init(getBaseContext());
+
+		LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+		boolean enabled = service
+				.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+		// Check if enabled and if not send user to the GSP settings
+		// Better solution would be to display a dialog and suggesting to
+		// go to the settings
+		if (!enabled) {
+			Intent intent = new Intent(
+					android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -79,8 +105,10 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 
 		int maxReceiveDistance = Integer.valueOf(prefs.getString(
 				"maxReceiveDistance", "1000"));
-		String serverAddress = prefs.getString("serverAddress",	"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/");
-		int updateIntervall = Integer.valueOf(prefs.getString("updateIntervall", "100"));
+		String serverAddress = prefs.getString("serverAddress",
+				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/");
+		int updateIntervall = Integer.valueOf(prefs.getString(
+				"updateIntervall", "100"));
 
 		Settings.setUserPreferences(new UserPreferences(maxBroadcastDistance,
 				maxReceiveDistance, serverAddress, updateIntervall));
