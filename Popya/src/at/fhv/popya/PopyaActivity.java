@@ -70,7 +70,7 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
-		String chatName = prefs.getString("chatName", "Gues" + Math.random());
+		String chatName = prefs.getString("chatName", "Guest" + Math.random());
 		String description = prefs.getString("description",
 				"No description entered");
 
