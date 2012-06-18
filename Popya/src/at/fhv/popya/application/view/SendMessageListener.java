@@ -24,7 +24,7 @@ public class SendMessageListener implements OnClickListener {
 
 		// read language from settings
 		Message<Object> msg = new Message<Object>(Message.LANG_EN, txtMessage
-				.getText().toString(), Settings.getUser());
+				.getText().toString(),Settings.getUser());
 
 		try {
 			MessagingService.enqueueMessage(msg);

@@ -66,7 +66,6 @@ public class MessagingService extends Service {
 	@Override
 	public void onCreate() {
 		_messages = new ArrayList<Message<Object>>();
-		Settings.loadSettings();
 		connect();
 
 		// define task for sending messages

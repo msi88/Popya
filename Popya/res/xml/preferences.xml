@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="User account settings" >
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue=""
+            android:key="chatName"
+            android:summary="Enter your desired chatname"
+            android:title="chatName" />
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue=""
+            android:key="description"
+            android:summary="Write something about yourself"
+            android:title="Description" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="message radius settings" >
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue="100"
+            android:key="maxBroadcastDistance"
+            android:maxLength="5"
+            android:numeric="integer"
+            android:summary="Enter the maximum broadcast distance of messages"
+            android:title="Maximum broadcast distance" />
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue="100"
+            android:key="maxReceiveDistance"
+            android:maxLength="5"
+            android:numeric="integer"
+            android:summary="Enter the maximum receive distance of messages"
+            android:title="Maximum receive distance" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Server settings" >
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue="http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/"
+            android:key="serverAddress"
+            android:summary="Enter the server address to connect to."
+            android:title="serverAddress" />
+        <EditTextPreference
+            android:name="EditText Preference"
+            android:defaultValue="50"
+            android:key="updateIntervall"
+            android:maxLength="4"
+            android:numeric="integer"
+            android:summary="Enter the interval for retreiving messages."
+            android:title="update intervall" />
+
+        <RingtonePreference
+            android:name="Ringtone Preference"
+            android:key="ringtonePref"
+            android:summary="Select a ringtone"
+            android:title="Ringtones" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

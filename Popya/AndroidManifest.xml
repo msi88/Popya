@@ -20,6 +20,6 @@
             </intent-filter>
         </activity>
         <service android:name=".application.service.background.MessagingService" android:permission="android.permission.INTERNET" android:enabled="true"></service>
-    </application>
-
+        <activity android:name="PopyaSettingsActivity" android:label="@xml/preferences"></activity>
+    </application>  
 </manifest>
