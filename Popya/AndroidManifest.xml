@@ -23,5 +23,7 @@
         </activity>
         <service android:name=".application.service.background.MessagingService" android:permission="android.permission.INTERNET" android:enabled="true"></service>
         <activity android:name="PopyaSettingsActivity" android:label="@xml/preferences"></activity>
+        <uses-library android:required="true" android:name="com.google.android.maps"/>
+        <activity android:name="ShowMapActivity"></activity>
     </application>  
 </manifest>

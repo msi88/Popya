@@ -1,18 +1,15 @@
 package at.fhv.popya.settings;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import at.fhv.popya.PopyaSettingsActivity;
 import at.fhv.popya.application.model.User;
 import at.fhv.popya.application.model.UserPreferences;
-import at.fhv.popya.application.view.SendMessageListener;
 
-/* TODO:
- * Load settings from xml file or something.
- * Make settings updateable.
+/**
  * 
- * */
-
+ * The Settings application wide settings
+ * 
+ * 
+ * @author Michael Sieber
+ */
 public class Settings {
 
 	private static UserPreferences userPreferences;

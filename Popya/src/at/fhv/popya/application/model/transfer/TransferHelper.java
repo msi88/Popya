@@ -35,7 +35,8 @@ public class TransferHelper {
 		}
 
 		User user = new User(transfer.getChatName(), transfer.getDescription(),
-				b, null, prefs);
+				b, prefs);
+		user.setCurrentLocation(transfer.getCurrentLocation());
 
 		return user;
 	}

@@ -1,8 +1,10 @@
 package at.fhv.popya.application.model;
 
+import java.io.ByteArrayOutputStream;
+
 import android.graphics.Bitmap;
-import android.location.LocationManager;
 import at.fhv.popya.application.model.transfer.ITransferable;
+import at.fhv.popya.application.transfer.LocationTO;
 import at.fhv.popya.application.transfer.UserTO;
 
 /**
@@ -16,8 +18,8 @@ public class User implements ITransferable<UserTO> {
 	private final String _chatName;
 	private final String _description;
 	private final Bitmap _picture;
-	private final LocationManager _locationManager;
 	private final UserPreferences _preferences;
+	private LocationTO _currLocation;
 
 	/**
 	 * Create a new user.
@@ -33,11 +35,10 @@ public class User implements ITransferable<UserTO> {
 	 *            location
 	 */
 	public User(String chatName, String description, Bitmap picture,
-			LocationManager locationManager, UserPreferences preferences) {
+			UserPreferences preferences) {
 		_chatName = chatName;
 		_description = description;
 		_picture = picture;
-		_locationManager = locationManager;
 		_preferences = preferences;
 	}
 
@@ -53,18 +54,57 @@ public class User implements ITransferable<UserTO> {
 		return _picture;
 	}
 
-	public LocationManager getLocationManager() {
-		return _locationManager;
-	}
-
 	public UserPreferences get_preferences() {
 		return _preferences;
 	}
 
+	public LocationTO getCurrentLocation() {
+		return _currLocation;
+	}
+
+	public void setCurrentLocation(LocationTO currentLocation) {
+		_currLocation = currentLocation;
+	}
+
 	@Override
 	public UserTO getTransferObject() {
-		// TODO picture and location are null, fix this !
-		return new UserTO(this.getChatName(), this.getDescription(), null, null ,this.get_preferences().getTransferObject());
+		// create byte array from bitmap
+		byte[] img = null;
+		if (getPicture() != null) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			getPicture().compress(Bitmap.CompressFormat.PNG, 100, out);
+			img = out.toByteArray();
+		}
+
+		return new UserTO(this.getChatName(), this.getDescription(), img,
+				getCurrentLocation(), this.get_preferences()
+						.getTransferObject());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_chatName == null) ? 0 : _chatName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (_chatName == null) {
+			if (other._chatName != null)
+				return false;
+		} else if (!_chatName.equals(other._chatName))
+			return false;
+		return true;
 	}
 
 }

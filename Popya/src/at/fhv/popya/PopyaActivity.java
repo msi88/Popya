@@ -1,5 +1,6 @@
 package at.fhv.popya;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -155,10 +156,11 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 
 		Settings.setUserPreferences(new UserPreferences(maxBroadcastDistance,
 				maxReceiveDistance, serverAddress, updateIntervall));
-		Settings.setUser(new User(chatName, description, null, null, Settings
+		Settings.setUser(new User(chatName, description, null, Settings
 				.getUserPreferences()));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -170,6 +172,34 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 			return true;
 		case R.id.quit:
 			System.exit(0);
+			return true;
+		case R.id.map:
+
+			// add all known users
+			int count = getListView().getCount() - 1;
+			List<User> users = new ArrayList<User>();
+			for (int i = 0; i < count; i++) {
+				Message<Object> message = (Message<Object>) getListView()
+						.getItemAtPosition(i);
+				if (message != null && !users.contains(message.get_user())) {
+					users.add(message.get_user());
+				}
+			}
+
+			// add local user if not in list
+			if (!users.contains(Settings.getUser())) {
+				// if the local user has no current location, set it
+				if (Settings.getUser().getCurrentLocation() == null) {
+					Settings.getUser().setCurrentLocation(
+							LocationHelper.getLocation());
+				}
+				// add local user
+				users.add(Settings.getUser());
+			}
+
+			ShowMapActivity.setUsers(users);
+			Intent mapIntent = new Intent(this, ShowMapActivity.class);
+			startActivity(mapIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
