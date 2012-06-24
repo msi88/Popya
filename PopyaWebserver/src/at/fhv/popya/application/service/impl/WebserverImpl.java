@@ -113,8 +113,14 @@ public class WebserverImpl implements IWebserver {
 						|| canCommunicate(receiver, message.getUser())) {
 
 					// special handling for generic message type
-					String txtMessage = ((com.sun.org.apache.xerces.internal.dom.ElementNSImpl) message
-							.getMessage()).getFirstChild().getTextContent();
+					String txtMessage = "";
+					if (message.getMessage() instanceof com.sun.org.apache.xerces.internal.dom.ElementNSImpl) {
+						txtMessage = ((com.sun.org.apache.xerces.internal.dom.ElementNSImpl) message
+								.getMessage()).getFirstChild().getTextContent();
+					} else {
+						txtMessage = message.getMessage().toString();
+					}
+
 					message.setMessage(txtMessage);
 
 					_messages.get(receiver).add(message);
