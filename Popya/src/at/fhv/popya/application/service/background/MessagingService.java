@@ -115,8 +115,9 @@ public class MessagingService extends Service {
 			public void run() {
 				List<MessageTO<Object>> messages;
 				try {
-					messages = WebserviceUtil.getMessages(Settings.getUser()
-							.getTransferObject());
+					UserTO tmp = Settings.getUser().getTransferObject();
+					tmp.setCurrentLocation(LocationHelper.getLocation());
+					messages = WebserviceUtil.getMessages(tmp);
 
 					for (MessageTO<Object> messageTO : messages) {
 						_messages.add(new Message<Object>(messageTO

@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,7 +33,6 @@ import at.fhv.popya.settings.Settings;
 public class PopyaActivity extends ListActivity implements IMessageListener {
 	private MessageAdapter _adapter;
 	private Intent _serviceIntent;
-	private OnSharedPreferenceChangeListener _prefListener;
 
 	/**
 	 * {@inheritDoc}
@@ -64,19 +62,6 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		initLocationManager();
 		startService(_serviceIntent);
 
-		// SharedPreferences keeps listeners in a WeakHashMap. This means that
-		// you cannot use an anonymous inner class as a listener, as it will
-		// become the target of garbage collection as soon as you leave the
-		// current scope.
-		_prefListener = new OnSharedPreferenceChangeListener() {
-
-			@Override
-			public void onSharedPreferenceChanged(
-					SharedPreferences sharedPreferences, String key) {
-				getPrefs();
-				restartMessagingService();
-			}
-		};
 	}
 
 	/**
@@ -128,7 +113,7 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		getPrefs();
+		loadPrefs();
 		MessagingService.registerListener(this);
 	}
 
@@ -136,13 +121,20 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 	protected void onResume() {
 		super.onResume();
 		MessagingService.registerListener(this);
+
+		if (PopyaSettingsActivity.MODIFIED) {
+			loadPrefs();
+			restartMessagingService();
+
+			// reset
+			PopyaSettingsActivity.MODIFIED = false;
+		}
 	}
 
-	public void getPrefs() {
+	public void loadPrefs() {
 		// Get the xml/preferences.xml preferences
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		prefs.registerOnSharedPreferenceChangeListener(_prefListener);
 
 		String chatName = prefs.getString("chatName", "Guest" + Math.random());
 		String description = prefs.getString("description",
@@ -156,7 +148,7 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 		String serverAddress = prefs.getString("serverAddress",
 				"http://vps.luukwullink.nl:8080/PopyaWebserver/rest/popya/");
 		int updateIntervall = Integer.valueOf(prefs.getString(
-				"updateIntervall", "100"));
+				"updateIntervall", "1000"));
 
 		Settings.setUserPreferences(new UserPreferences(maxBroadcastDistance,
 				maxReceiveDistance, serverAddress, updateIntervall));
