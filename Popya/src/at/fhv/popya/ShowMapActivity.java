@@ -5,12 +5,12 @@ import java.util.List;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import at.fhv.popya.application.location.UserMapOverlay;
+import android.widget.Toast;
 import at.fhv.popya.application.model.User;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.OverlayItem;
@@ -22,9 +22,7 @@ import com.google.android.maps.OverlayItem;
  * @author Michael Sieber
  */
 public class ShowMapActivity extends MapActivity {
-	private MapController _mapController;
 	private MapView _mapView;
-	private UserMapOverlay _itemizedoverlay;
 	private MyLocationOverlay _myLocationOverlay;
 	private static List<User> _users = new ArrayList<User>();
 
@@ -37,28 +35,16 @@ public class ShowMapActivity extends MapActivity {
 		_mapView = (MapView) findViewById(R.id.mapview);
 		_mapView.setBuiltInZoomControls(true);
 		_mapView.setSatellite(true);
-		_mapController = _mapView.getController();
-		_mapController.setZoom(14); // Zoon 1 is world view
+		_mapView.getController().setZoom(14);
+		_mapView.setBuiltInZoomControls(true);
+
+		Drawable marker = this.getResources().getDrawable(R.drawable.user);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+				marker.getIntrinsicHeight());
+		_mapView.getOverlays().add(new UserMapOverlay(marker));
 
 		_myLocationOverlay = new MyLocationOverlay(this, _mapView);
 		_mapView.getOverlays().add(_myLocationOverlay);
-
-		_myLocationOverlay.runOnFirstFix(new Runnable() {
-			@Override
-			public void run() {
-				_mapView.getController().animateTo(
-						_myLocationOverlay.getMyLocation());
-			}
-		});
-
-		Drawable drawable = this.getResources().getDrawable(R.drawable.user);
-		_itemizedoverlay = new UserMapOverlay(this, drawable);
-
-		if (_users != null) {
-			for (User u : _users) {
-				createMarker(u);
-			}
-		}
 	}
 
 	@Override
@@ -66,30 +52,15 @@ public class ShowMapActivity extends MapActivity {
 		return false;
 	}
 
-	private void createMarker(User user) {
-		if (user.getCurrentLocation() != null) {
-			int lat = (int) (user.getCurrentLocation().getLatitude() * 1E6);
-			int lang = (int) (user.getCurrentLocation().getLongitude() * 1E6);
-			GeoPoint p = new GeoPoint(lat, lang);
-			OverlayItem overlayitem = new OverlayItem(p, user.getChatName(), "");
-			_itemizedoverlay.addOverlay(overlayitem);
-			if (_itemizedoverlay.size() > 0) {
-				_mapView.getOverlays().add(_itemizedoverlay);
-			}
-		}
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
-		_myLocationOverlay.enableMyLocation();
 		_myLocationOverlay.enableCompass();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onResume();
-		_myLocationOverlay.disableMyLocation();
 		_myLocationOverlay.disableCompass();
 	}
 
@@ -101,5 +72,58 @@ public class ShowMapActivity extends MapActivity {
 	 */
 	public static void setUsers(List<User> users) {
 		_users = users;
+	}
+
+	private GeoPoint getPoint(double lat, double lon) {
+		return (new GeoPoint((int) (lat * 1000000.0), (int) (lon * 1000000.0)));
+	}
+
+	private class UserMapOverlay extends ItemizedOverlay<OverlayItem> {
+		private final List<OverlayItem> items = new ArrayList<OverlayItem>();
+
+		public UserMapOverlay(Drawable marker) {
+			super(marker);
+
+			boundCenterBottom(marker);
+
+			if (_users != null) {
+				for (int i = 0; i < _users.size(); i++) {
+					User u = _users.get(i);
+
+					if (u.getCurrentLocation() != null) {
+						GeoPoint p = getPoint(u.getCurrentLocation()
+								.getLatitude(), u.getCurrentLocation()
+								.getLongitude());
+
+						// set first point as center of the map
+						if (i == 0) {
+							_mapView.getController().setCenter(p);
+						}
+
+						items.add(new OverlayItem(p, u.getChatName(), null));
+					}
+				}
+			}
+
+			populate();
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return (items.get(i));
+		}
+
+		@Override
+		protected boolean onTap(int i) {
+			Toast.makeText(ShowMapActivity.this, items.get(i).getTitle(),
+					Toast.LENGTH_SHORT).show();
+
+			return (true);
+		}
+
+		@Override
+		public int size() {
+			return (items.size());
+		}
 	}
 }
