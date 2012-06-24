@@ -34,12 +34,6 @@ public class LocationHelper {
 				double lang = location.getLongitude();
 				double alt = location.getAltitude();
 				return new LocationTO(lat, lang, alt);
-			} else {
-				// TODO remove
-				double lat = 47.479842;
-				double lang = 9.764936;
-				double alt = 0d;
-				return new LocationTO(lat, lang, alt);
 			}
 		}
 
