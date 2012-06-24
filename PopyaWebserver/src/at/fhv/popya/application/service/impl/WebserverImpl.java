@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 import at.fhv.popya.application.service.UserException;
 import at.fhv.popya.application.service.helper.LocationHelper;
+import at.fhv.popya.application.transfer.LocationTO;
 import at.fhv.popya.application.transfer.MessageTO;
 import at.fhv.popya.application.transfer.MessagesTO;
 import at.fhv.popya.application.transfer.UserTO;
@@ -108,8 +109,8 @@ public class WebserverImpl implements IWebserver {
 				// check if the partners can communicate
 				// if the partner and the receiver are the same person also add
 				// the message
-				if (canCommunicate(receiver, message.getUser())
-						|| message.getUser().equals(receiver)) {
+				if (message.getUser().equals(receiver)
+						|| canCommunicate(receiver, message.getUser())) {
 
 					// special handling for generic message type
 					String txtMessage = ((com.sun.org.apache.xerces.internal.dom.ElementNSImpl) message
@@ -135,7 +136,14 @@ public class WebserverImpl implements IWebserver {
 
 				// update the user
 				if (key.equals(user)) {
-					key.setCurrentLocation(user.getCurrentLocation());
+					if (user.getCurrentLocation() != null) {
+						LocationTO loc = new LocationTO();
+						loc.setLatitude(user.getCurrentLocation().getLatitude());
+						loc.setLongitude(user.getCurrentLocation()
+								.getLongitude());
+						loc.setAltitude(user.getCurrentLocation().getAltitude());
+						key.setCurrentLocation(loc);
+					}
 				}
 			}
 		}
