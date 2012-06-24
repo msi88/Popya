@@ -47,6 +47,10 @@ public class PopyaActivity extends ListActivity implements IMessageListener {
 
 		ListView lv = getListView();
 
+		// layout adjustments
+		lv.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+		lv.setStackFromBottom(true);
+
 		View v = getLayoutInflater()
 				.inflate(R.layout.message_list_footer, null);
 		lv.addFooterView(v);

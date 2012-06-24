@@ -86,11 +86,18 @@ public class MessagingService extends Service {
 				if (MESSAGE_SEND_QUEUE != null) {
 					while (!MESSAGE_SEND_QUEUE.isEmpty()) {
 						try {
-							MessageTO<?> tmp = MESSAGE_SEND_QUEUE.poll()
-									.getTransferObject();
-							tmp.getUser().setCurrentLocation(
-									LocationHelper.getLocation());
-							WebserviceUtil.sendMessage(tmp);
+
+							MessageTO<?> tmp = null;
+							synchronized (MESSAGE_SEND_QUEUE) {
+								tmp = MESSAGE_SEND_QUEUE.poll()
+										.getTransferObject();
+							}
+
+							if (tmp != null) {
+								tmp.getUser().setCurrentLocation(
+										LocationHelper.getLocation());
+								WebserviceUtil.sendMessage(tmp);
+							}
 						} catch (Exception e) {
 							Log.e(getClass().toString(),
 									"Error sending message.", e);
@@ -189,7 +196,7 @@ public class MessagingService extends Service {
 	 * @param message
 	 *            The message to add to the queue
 	 */
-	public static void enqueueMessage(Message<Object> message) {
+	public static synchronized void enqueueMessage(Message<Object> message) {
 		if (MESSAGE_SEND_QUEUE == null) {
 			MESSAGE_SEND_QUEUE = new LinkedList<Message<Object>>();
 		}
