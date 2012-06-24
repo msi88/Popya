@@ -83,6 +83,10 @@ public class WebserverImpl implements IWebserver {
 
 			// reset the message list
 			_messages.get(user).clear();
+
+			// update user location
+			updateUserLocation(user);
+
 			return out;
 		}
 		throw new UserException(_uriInfo.getBaseUriBuilder()
@@ -95,6 +99,10 @@ public class WebserverImpl implements IWebserver {
 	@Override
 	public void sendMessage(MessageTO<Object> message) {
 		if (message != null) {
+
+			// update users location
+			updateUserLocation(message.getUser());
+
 			for (UserTO receiver : _messages.keySet()) {
 
 				// check if the partners can communicate
@@ -109,6 +117,25 @@ public class WebserverImpl implements IWebserver {
 					message.setMessage(txtMessage);
 
 					_messages.get(receiver).add(message);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Update the user location for a specific user
+	 * 
+	 * @param user
+	 *            The user
+	 */
+	private void updateUserLocation(UserTO user) {
+		if (_messages.containsKey(user)) {
+			// find the right user
+			for (UserTO key : _messages.keySet()) {
+
+				// update the user
+				if (key.equals(user)) {
+					key.setCurrentLocation(user.getCurrentLocation());
 				}
 			}
 		}
